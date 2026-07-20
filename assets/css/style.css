@@ -1,63 +1,379 @@
-body{
-
-    margin:0;
-
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-
-    background:#0F172A;
-
-    color:white;
-
+:root {
+    --primary: #c55c43;
+    --bg-light: #ffffff; /* 應要求：底色改為純白色 */
+    --bg-tint: #f2eabe;  /* 原底色轉為溫和的點綴色 */
+    --accent-yellow: #ddbc3a;
+    --dark-blue: #1e3048;
+    --coral: #e58b77;
+    --peach: #fad7bd;
+    --white: #ffffff;
 }
 
-header{
-
-    text-align:center;
-
-    padding:100px 20px;
-
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
-h1{
-
-    font-size:48px;
-
+body {
+    font-family: "Helvetica Neue", Arial, "Noto Sans TC", sans-serif;
+    background-color: var(--bg-light);
+    color: var(--dark-blue);
+    line-height: 1.6;
 }
 
-p{
-
-    color:#d6d6d6;
-
-    line-height:1.8;
-
+/* 導覽列 */
+header {
+    background-color: var(--white);
+    border-bottom: 2px solid var(--primary);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
-section{
-
-    max-width:700px;
-
-    margin:auto;
-
-    text-align:center;
-
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
 }
 
-button{
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--primary);
+    text-decoration: none;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
 
-    margin-top:30px;
+.nav-menu {
+    display: flex;
+    list-style: none;
+    gap: 25px;
+}
 
-    background:#E55D2B;
+.nav-menu a {
+    text-decoration: none;
+    color: var(--dark-blue);
+    font-weight: 500;
+    transition: color 0.3s;
+    font-size: 16px;
+}
 
-    color:white;
+.nav-menu a:hover {
+    color: var(--primary);
+}
 
-    border:none;
+/* 主視覺區 (Hero) */
+.hero {
+    background-color: var(--white); /* 改為乾淨白色底 */
+    padding: 80px 20px;
+    text-align: center;
+    border-bottom: 2px solid #eee;
+}
 
-    padding:16px 28px;
+.hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
 
-    border-radius:999px;
+.main-logo-img {
+    max-width: 280px; /* 控制你的 LOGO 圖片顯示大小 */
+    height: auto;
+    margin-bottom: 20px;
+}
 
-    font-size:18px;
+.hero p {
+    font-size: 18px;
+    color: var(--dark-blue);
+    margin-bottom: 30px;
+    letter-spacing: 0.5px;
+}
 
-    cursor:pointer;
+.btn {
+    display: inline-block;
+    background-color: var(--primary);
+    color: var(--white);
+    padding: 12px 30px;
+    text-decoration: none;
+    border-radius: 30px;
+    font-weight: bold;
+    transition: transform 0.2s, background-color 0.3s;
+    border: none;
+    cursor: pointer;
+}
 
+.btn:hover {
+    background-color: var(--coral);
+    transform: translateY(-2px);
+}
+
+/* 區塊通用 */
+section {
+    padding: 80px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.light-section {
+    background-color: #fafafa;
+    border-radius: 12px;
+    padding: 60px 40px;
+}
+
+.section-title {
+    text-align: center;
+    font-size: 30px;
+    color: var(--primary);
+    margin-bottom: 50px;
+}
+
+.section-title::after {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 3px;
+    background-color: var(--accent-yellow);
+    margin: 12px auto 0;
+}
+
+/* 關於我們 */
+.about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: center;
+}
+
+.about-text p {
+    margin-bottom: 20px;
+    font-size: 16px;
+    text-align: justify;
+}
+
+.about-img-placeholder {
+    background-color: var(--bg-tint);
+    border: 2px solid var(--dark-blue);
+    border-radius: 8px;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+    color: var(--primary);
+}
+
+/* 活動卡片 */
+.event-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.event-card {
+    background-color: var(--white);
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid #e0e0e0;
+}
+
+.event-info {
+    padding: 25px;
+}
+
+.event-date {
+    color: var(--primary);
+    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.event-title {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: var(--dark-blue);
+}
+
+/* 魔法小卡展示 */
+.card-showcase {
+    background-color: var(--dark-blue);
+    color: var(--white);
+    border-radius: 12px;
+    padding: 40px;
+}
+
+.card-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: center;
+}
+
+.card-image-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.magic-card-img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+}
+
+/* 補給站與 Leaflet 地圖樣式 */
+.search-container {
+    max-width: 600px;
+    margin: 0 auto 30px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 12px 25px;
+    border: 2px solid var(--dark-blue);
+    border-radius: 30px;
+    font-size: 16px;
+    outline: none;
+}
+
+.search-input:focus {
+    border-color: var(--primary);
+}
+
+#map {
+    height: 450px;
+    width: 100%;
+    border-radius: 8px;
+    border: 2px solid var(--dark-blue);
+    margin-bottom: 40px;
+    z-index: 1; /* 防止覆蓋導覽列 */
+}
+
+/* Leaflet 地圖彈窗內部樣式 */
+.map-popup-content {
+    font-family: sans-serif;
+    line-height: 1.4;
+}
+
+.popup-logo {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 4px;
+    float: right;
+    margin-left: 10px;
+    border: 1px solid #ccc;
+}
+
+.map-popup-content p {
+    margin: 3px 0 !important;
+    font-size: 12px;
+    color: #444;
+}
+
+/* 下方店家卡片列表 */
+.station-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+}
+
+.station-card {
+    background-color: var(--white);
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.station-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.station-tag {
+    display: inline-block;
+    background-color: var(--peach);
+    color: var(--primary);
+    font-size: 12px;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-weight: bold;
+}
+
+.station-name {
+    font-size: 18px;
+    margin: 10px 0 5px;
+    color: var(--dark-blue);
+}
+
+.station-discount {
+    color: var(--primary);
+    font-weight: bold;
+    font-size: 14px;
+    margin: 10px 0 15px;
+}
+
+.nav-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background-color: var(--dark-blue);
+    color: var(--white);
+    text-decoration: none;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.nav-btn:hover {
+    background-color: var(--primary);
+}
+
+/* 頁尾 */
+footer {
+    background-color: var(--dark-blue);
+    color: var(--peach);
+    text-align: center;
+    padding: 40px 20px;
+    margin-top: 60px;
+    border-top: 4px solid var(--primary);
+}
+
+.footer-socials {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.footer-socials a {
+    color: var(--peach);
+    font-size: 20px;
+    transition: color 0.3s;
+}
+
+.footer-socials a:hover {
+    color: var(--accent-yellow);
+}
+
+/* 響應式 */
+@media (max-width: 768px) {
+    .nav-container { flex-direction: column; gap: 15px; }
+    .about-grid { grid-template-columns: 1fr; }
+    .card-grid { grid-template-columns: 1fr; }
+    .light-section { padding: 30px 20px; }
+    #map { height: 320px; }
 }
