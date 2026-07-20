@@ -1,40 +1,267 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>浪漫補給地圖｜Romantic Supply Map</title>
-
-    <link rel="stylesheet" href="assets/css/style.css">
+    <title>國民車浪漫野餐隊 | Romantic Picnic Club</title>
+    <!-- Font Awesome 圖標庫 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Leaflet 地圖 CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <!-- 引入獨立的 CSS 檔案 -->
+    <link rel="stylesheet" href="css/style.css">
 </head>
-
 <body>
 
-<header>
+    <!-- 導覽列 -->
+    <header>
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <i class="fa-solid fa-motorcycle"></i> 國民車浪漫野餐隊
+            </a>
+            <ul class="nav-menu">
+                <li><a href="#about">關於我們</a></li>
+                <li><a href="#events">活動資訊</a></li>
+                <li><a href="#card">魔法小卡</a></li>
+                <li><a href="#stations">浪漫補給站</a></li>
+            </ul>
+        </div>
+    </header>
 
-    <h1>🌙 浪漫補給地圖</h1>
+    <!-- 主視覺區 (Hero) - 改為放 LOGO 圖片 -->
+    <section class="hero">
+        <div class="hero-content">
+            <!-- 請將你的 logo.png 放至專案的 images 資料夾下 -->
+            <img src="images/logo.png" alt="國民車浪漫野餐隊 LOGO" class="main-logo-img">
+            <p>騎上國民車，兜售日常的浪漫。不飆車，只追求風的溫度與生活的甜度。</p>
+            <a href="#stations" class="btn"><i class="fa-solid fa-map-location-dot"></i> 搜尋最近的補給站</a>
+        </div>
+    </section>
 
-    <p>每一段旅程，都值得停留。</p>
+    <!-- 關於我們 -->
+    <section id="about">
+        <h2 class="section-title">關於我們</h2>
+        <div class="about-grid">
+            <div class="about-text">
+                <p><strong>「國民車浪漫野餐隊」</strong> 創立於對老式國民車（Cub、金旺、美麗、WOWOW）的熱愛。我們深信，最美的風景不是時速破百的刺激，而是時速四十公里時，迎面撲來的泥土香與青草味。</p>
+                <p>我們定期號召車友，將野餐墊與手沖咖啡裝備綁在後貨架上，一路慢行至山海之間，展開一場屬於經緯度與浪漫的對話。這不只是一個車隊，更是一種實踐慢活的生活美學組織。</p>
+            </div>
+            <div class="about-img-placeholder">
+                <i class="fa-solid fa-campground"></i>
+            </div>
+        </div>
+    </section>
 
-</header>
+    <!-- 定期活動資訊 -->
+    <section id="events" class="light-section">
+        <h2 class="section-title">定期活動資訊</h2>
+        <div class="event-cards">
+            <div class="event-card">
+                <div class="event-info">
+                    <div class="event-date"><i class="fa-regular fa-calendar"></i> 每月第一個週六</div>
+                    <h3 class="event-title">例行性微風野餐騎行</h3>
+                    <p>慢速巡航至秘密草皮，分享自製點心與機車生活日常，歡迎新朋友加入！</p>
+                </div>
+            </div>
+            <div class="event-card">
+                <div class="event-info">
+                    <div class="event-date"><i class="fa-regular fa-calendar"></i> 定期公告</div>
+                    <h3 class="event-title">浪漫山海大會師</h3>
+                    <p>年度最重要的盛事，我們將橫跨山線與海線，聚集全台熱愛浪漫的國民車友。</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<main>
+    <!-- 浪漫魔法小卡介紹 -->
+    <section id="card">
+        <h2 class="section-title">浪漫魔法小卡</h2>
+        <div class="card-showcase">
+            <div class="card-grid">
+                <div class="card-image-box">
+                    <!-- 請將你的魔法小卡圖片放至 images 資料夾，或直接修改此處路徑 -->
+                    <img src="images/magic-card.png" alt="浪漫魔法小卡" class="magic-card-img">
+                </div>
+                <div>
+                    <h3 style="color: var(--accent-yellow); margin-bottom: 15px; font-size: 24px;">隨身攜帶的浪漫通行證</h3>
+                    <p style="margin-bottom: 20px; color: var(--peach);">「浪漫魔法小卡」是屬於我們會員的專屬徽章。只要在我們合作的「浪漫補給站」消費時出示此卡，就能夠享有車友限定的專屬優惠。不只是省荷包，更是我們與在地優質品牌連結的浪漫默契。</p>
+                    <span class="station-tag" style="background-color: var(--primary); color: white; border: none;">合作店家品牌持續招募中！</span>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<section>
+    <!-- 浪漫補給站 (Leaflet 地圖與查詢) -->
+    <section id="stations">
+        <h2 class="section-title">浪漫補給站查詢</h2>
+        
+        <!-- 搜尋輸入框 -->
+        <div class="search-container">
+            <input type="text" id="searchInput" class="search-input" placeholder="輸入關鍵字搜尋補給站（如：咖啡、台南、漢堡）...">
+        </div>
 
-<h2>探索浪漫補給站</h2>
+        <!-- Leaflet 地圖容器 -->
+        <div id="map"></div>
 
-<p>
-車友專屬特約店家地圖，
-出示浪漫魔法小卡即可享有各店家提供的專屬優惠。
-</p>
+        <!-- 補給站文字卡片容器 (保留備用，地圖篩選時也會同步篩選此列表) -->
+        <div class="station-grid" id="stationGrid"></div>
+    </section>
 
-<button>探索補給站</button>
+    <!-- 頁尾 -->
+    <footer>
+        <div class="footer-socials">
+            <a href="#"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#"><i class="fa-brands fa-facebook"></i></a>
+            <a href="https://github.com/romanticpicnicclub/RomanticPicnicClub" target="_blank"><i class="fa-brands fa-github"></i></a>
+        </div>
+        <p>&copy; 2026 國民車浪漫野餐隊 Romantic Picnic Club. All Rights Reserved.</p>
+    </footer>
 
-</section>
+    <!-- Leaflet 地圖 JavaScript -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <script>
+        // 1. 初始化 Leaflet 地圖 (預設定位在台灣中心點附近)
+        const map = L.map('map').setView([23.6, 121.0], 7);
+        
+        // 使用 OpenStreetMap 的乾淨圖資
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
 
-</main>
+        // 用來存放地圖標記的群組
+        let markersGroup = L.layerGroup().addTo(map);
 
+        // 2. 這裡放你的 Google Sheets CSV 網址
+        // 請記得在 Sheets 點選：檔案 > 共用 > 發布到網路 > 選擇「逗號分隔值(.csv)」並複製網址填到下方
+        const googleSheetCsvUrl = 'YOUR_GOOGLE_SHEETS_CSV_URL_HERE'; 
+
+        // 備用在地測試資料 (若尚未串接 Google Sheet，網頁會先跑這個)
+        const localBackupStations = [
+            { name: "浪漫漫咖啡 tokyobike 聯名店", category: "咖啡廳", city: "台北市", discount: "全品項 9 折", phone: "02-12345678", address: "台北市大同區迪化街一段", lat: 25.056, lng: 121.510, logo: "https://via.placeholder.com/60" },
+            { name: "日落野餐選物社", category: "戶外選物", city: "台南市", discount: "選物系列商品享 85 折", phone: "06-9876543", address: "台南市中西區神農街", lat: 22.997, lng: 120.196, logo: "https://via.placeholder.com/60" }
+        ];
+
+        let allStations = [];
+
+        // 3. 解析 CSV 轉為 JSON 陣列的函式
+        function csvToJSON(csv) {
+            const lines = csv.split("\\n");
+            const result = [];
+            const headers = lines[0].split(",").map(h => h.trim());
+            for (let i = 1; i < lines.length; i++) {
+                if (!lines[i]) continue;
+                const obj = {};
+                const currentline = lines[i].split(",");
+                headers.forEach((header, index) => {
+                    obj[header] = currentline[index] ? currentline[index].trim() : '';
+                });
+                // 轉為數字型態的經緯度
+                obj.lat = parseFloat(obj.lat);
+                obj.lng = parseFloat(obj.lng);
+                result.push(obj);
+            }
+            return result;
+        }
+
+        // 4. 抓取資料並渲染地圖與列表
+        async function initData() {
+            try {
+                if(googleSheetCsvUrl !== 'YOUR_GOOGLE_SHEETS_CSV_URL_HERE') {
+                    const response = await fetch(googleSheetCsvUrl);
+                    const csvText = await response.text();
+                    allStations = csvToJSON(csvText);
+                } else {
+                    allStations = localBackupStations;
+                }
+                renderMapAndList(allStations);
+            } catch (error) {
+                console.error("資料載入失敗，採用本地備用資料", error);
+                allStations = localBackupStations;
+                renderMapAndList(allStations);
+            }
+        }
+
+        // 5. 渲染地圖 Marker 與卡片列表
+        function renderMapAndList(data) {
+            // 清除現有地圖標記與文字列表
+            markersGroup.clearLayers();
+            const stationGrid = document.getElementById('stationGrid');
+            stationGrid.innerHTML = '';
+
+            if(data.length === 0) {
+                stationGrid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 20px;">沒有找到相符的補給站</div>`;
+                return;
+            }
+
+            data.forEach(station => {
+                // 導航連結
+                const mapUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(station.name + ' ' + station.address)}`;
+                
+                // 建立 Leaflet Popup 內嵌 HTML
+                const popupHtml = `
+                    <div class="map-popup-content">
+                        <img src="${station.logo || 'https://via.placeholder.com/60'}" alt="LOGO" class="popup-logo">
+                        <h4 style="margin: 5px 0; color:var(--primary); font-size:16px;">${station.name}</h4>
+                        <p><strong>分類：</strong>${station.city} · ${station.category}</p>
+                        <p style="color:var(--primary);"><strong>優惠：</strong>${station.discount}</p>
+                        <p><strong>電話：</strong>${station.phone}</p>
+                        <p><strong>地址：</strong>${station.address}</p>
+                        <a href="${mapUrl}" target="_blank" class="nav-btn" style="margin-top:8px; display:inline-flex; color:white; text-decoration:none; padding:5px 10px; border-radius:4px; font-size:12px; background-color:var(--dark-blue);">
+                            <i class="fa-solid fa-location-arrow"></i> 開始導航
+                        </a>
+                    </div>
+                `;
+
+                // 在地圖上畫 Marker 點
+                if(!isNaN(station.lat) && !isNaN(station.lng)) {
+                    L.marker([station.lat, station.lng])
+                     .bindPopup(popupHtml)
+                     .addTo(markersGroup);
+                }
+
+                // 同步渲染下方的卡片
+                const card = document.createElement('div');
+                card.className = 'station-card';
+                card.innerHTML = `
+                    <div>
+                        <div style="display:flex; gap:10px; align-items:center; margin-bottom:10px;">
+                            <img src="${station.logo || 'https://via.placeholder.com/60'}" style="width:40px; height:40px; object-fit:cover; border-radius:50%; border:1px solid #ddd;">
+                            <span class="station-tag" style="margin:0;">${station.city} · ${station.category}</span>
+                        </div>
+                        <h3 class="station-name">${station.name}</h3>
+                        <p style="font-size:13px; color:#666; margin-bottom:5px;"><i class="fa-solid fa-phone"></i> ${station.phone}</p>
+                        <p class="station-discount"><i class="fa-solid fa-gift"></i> ${station.discount}</p>
+                    </div>
+                    <a href="${mapUrl}" target="_blank" class="nav-btn"><i class="fa-solid fa-location-arrow"></i> 開啟 Google Maps 導航</a>
+                `;
+                stationGrid.appendChild(card);
+            });
+
+            // 搜尋後自動縮放到可以看到所有點的位置
+            if (data.length > 0 && googleSheetCsvUrl !== 'YOUR_GOOGLE_SHEETS_CSV_URL_HERE') {
+                const group = new L.featureGroup(markersGroup.getLayers());
+                if(group.getBounds().isValid()) {
+                    map.fitBounds(group.getBounds().pad(0.1));
+                }
+            }
+        }
+
+        // 6. 搜尋欄監聽
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const keyword = e.target.value.toLowerCase().trim();
+            const filtered = allStations.filter(station => {
+                return (station.name && station.name.toLowerCase().includes(keyword)) || 
+                       (station.category && station.category.toLowerCase().includes(keyword)) || 
+                       (station.city && station.city.toLowerCase().includes(keyword)) || 
+                       (station.discount && station.discount.toLowerCase().includes(keyword)) ||
+                       (station.address && station.address.toLowerCase().includes(keyword));
+            });
+            renderMapAndList(filtered);
+        });
+
+        // 初始執行
+        initData();
+    </script>
 </body>
 </html>
