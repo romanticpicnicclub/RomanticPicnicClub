@@ -1,0 +1,56 @@
+/* ==========================
+   Romantic Picnic Club
+   Design System v1.0
+========================== */
+
+:root{
+
+    /* ===== Brand ===== */
+
+    --color-primary: #24344D;
+    --color-accent: #D96A47;
+    --color-gold: #E8C968;
+
+    /* ===== Background ===== */
+
+    --bg-body: #F8F5EF;
+    --bg-section: #FDFBF8;
+    --bg-card: #FFFFFF;
+    --bg-hover: #F3EEE7;
+
+    /* ===== Text ===== */
+
+    --text-primary: #24344D;
+    --text-secondary: #6E7784;
+    --text-light: #9CA3AF;
+
+    /* ===== Border ===== */
+
+    --border-light: #E6E1D8;
+    --border-dark: #C9C1B4;
+
+    /* ===== Status ===== */
+
+    --success: #6B9D65;
+    --warning: #D39C45;
+    --danger: #C96A5D;
+
+    /* ===== Radius ===== */
+
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 20px;
+
+    /* ===== Shadow ===== */
+
+    --shadow-sm: 0 4px 12px rgba(0,0,0,.05);
+    --shadow-md: 0 8px 24px rgba(0,0,0,.08);
+    --shadow-lg: 0 16px 40px rgba(0,0,0,.12);
+
+    /* ===== Layout ===== */
+
+    --container: 1200px;
+
+    --section-space: 120px;
+
+}
