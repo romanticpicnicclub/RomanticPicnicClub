@@ -1,136 +1,212 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>國民車浪漫野餐隊 | Romantic Picnic Club</title>
-    <!-- Font Awesome 圖標庫 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Leaflet 地圖 CSS（保留在 head 最安全） -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <!-- 引入獨立的 CSS 檔案 -->
-    <link rel="stylesheet" href="assets/css/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌹</text></svg>">
+  <title>國民車浪漫野餐隊 - 浪漫補給站</title>
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  
+  <!-- Swiper CSS (輪播功能) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+  <!-- FontAwesome 圖示庫 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <!-- 自訂 CSS -->
+  <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
 
-    <!-- 導覽列 -->
-    <header>
-        <div class="nav-container">
-            <a href="#" class="logo">
-                </i> 國民車浪漫野餐隊 Romantic Picnic Club
-            </a>
-            <ul class="nav-menu">
-                <li><a href="#about">關於我們</a></li>
-                <li><a href="#events">活動資訊</a></li>
-                <li><a href="#card">魔法小卡</a></li>
-                <li><a href="#stations">浪漫補給站</a></li>
-            </ul>
-        </div>
-    </header>
+  <!-- ==================== 0. 頂部導覽列選單 ==================== -->
+<header class="navbar">
+  <div class="nav-container">
+    <!-- 更新 Logo 文字 -->
+    <a href="#" class="nav-logo">國民車浪漫野餐隊 Romantic Picnic Club</a>
+    
+    <nav class="nav-menu">
+      <a href="#about" class="nav-link">關於我們</a>
+      <a href="#events" class="nav-link">活動資訊</a>
+      <a href="#magic-card" class="nav-link">浪漫魔法小卡</a>
+      <a href="#stations" class="nav-link">浪漫補給站</a>
+    </nav>
+  </div>
+</header>
 
-    <!-- 主視覺區 (Hero) -->
-    <section class="hero">
-        <div class="hero-content">
-            <img src="assets/images/logo/RomanticPicnicClub_LOGO.png" alt="RomanticPicnicCLub LOGO" class="main-logo-img">
+  <!-- ==================== 1. 關於我們 (Swiper 輪播滿版壓字) ==================== -->
+  <section id="about">
+    <div class="about-hero-container">
+      
+      <!-- Swiper 圖片輪播主體 -->
+      <div class="swiper about-swiper">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide">
+            <img src="assets/images/about/about_1.jpg" alt="國民車浪漫野餐隊 1" class="about-hero-img">
+          </div>
+          <div class="swiper-slide">
+            <img src="assets/images/about/about_2.jpg" alt="國民車浪漫野餐隊 2" class="about-hero-img">
+          </div>
+          <div class="swiper-slide">
+            <img src="assets/images/about/about_3.jpg" alt="國民車浪漫野餐隊 3" class="about-hero-img">
+          </div>
+          <div class="swiper-slide">
+            <img src="assets/images/about/about_4.jpg" alt="國民車浪漫野餐隊 3" class="about-hero-img">
+          </div>
         </div>
-    </section>
+        <!-- 輪播分頁點 -->
+        <div class="swiper-pagination"></div>
+      </div>
 
-    <!-- 關於我們 -->
-    <section id="about">
-        <h2 class="section-title">關於我們</h2>
-        <div class="about-grid">
-            <div class="about-text">
-                <p>浪漫從來就不是口號，而是分享且實踐於生活的一種方式。</p>
-            </div>
-             <div class="about-photo-frame">
-                <img src="assets/images/about/about.jpg" alt="about">
-            </div>
-        </div>
-    </section>
+      <!-- 浮疊在圖片上的文字區塊 -->
+      <div class="about-hero-overlay">
+        <h2 class="about-hero-title">關於我們</h2>
+        <p class="about-hero-text">浪漫從來就不是口號，而是分享且實踐於生活的一種方式。
+        <p>⟢生活⟡騎行⟡風景⟣</p>
+        </p>
+      </div>
 
-    <!-- 活動資訊 -->
-    <section id="events" class="light-section">
-        <div class="activity-section">
-            <h2 class="section-title">活動資訊</h2>
-            <a href="https://www.facebook.com/share/p/14jWhLyF8F6/" target="_blank" class="event-card-link">
-                <div class="event-card">
-                    <div class="event-image-box">
-                        <img src="assets/images/event/event_1.jpg" alt="月來月浪漫夜騎活動">
-                    </div>
-                    <div class="event-content-box">
-                        <div class="event-tag">
-                            <i class="fab fa-facebook"></i> Facebook
-                        </div>
-                        <h3 class="event-title">Romantic Picnic Club 國民車浪漫野餐隊</h3>
-                        <p class="event-description">
-                          點擊前往 Facebook 查看完整貼文！加入我們的騎行聚會，一起享受騎乘的微風還有浪漫的野餐時光。詳細資訊與活動公告皆以社群專頁為主。
-                        </p>
-                        <span class="event-more-btn">閱讀完整貼文 →</span>
-                    </div>
-                </div>
-            </a>
-        </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- 浪漫魔法小卡介紹 -->
-    <section id="card">
-        <h2 class="section-title">浪漫魔法小卡</h2>
-        <div class="card-showcase">
-            <div class="card-grid">
-                <div class="card-image-box">
-                    <img src="assets/images/magiccard/MagicCard_Sample.png" alt="浪漫魔法小卡" class="magic-card-img">
-                </div>
-                <div>
-                    <h3 style="color: var(--accent-yellow); margin-bottom: 15px; font-size: 24px;">隨身攜帶的浪漫通行證</h3>
-                    <p style="margin-bottom: 20px; color: var(--peach);">「浪漫魔法小卡」是屬於每位浪漫野餐隊員的專屬徽章，曾經參與過我們的活動並完成指定條件即可獲得。只要在我們合作的「浪漫補給站」消費時出示此卡，就能夠享有車友限定的專屬優惠。</p>
-                    <span class="station-tag" style="background-color: var(--primary); color: white; border: none;">合作店家品牌持續招募中！</span>
-                </div>
-            </div>
-        </div>
-    </section>
+    <!-- ==================== 2. 活動資訊區塊 ==================== -->
+  <section id="events" class="events-section">
+  <div class="events-container">
+    
+    <!-- 標題與裝飾黃線 -->
+    <h2 class="section-title">活動資訊</h2>
+    <div class="title-underline"></div>
 
-    <!-- 浪漫補給站 (Leaflet 地圖與查詢) -->
-    <section id="stations">
-        <h2 class="section-title">浪漫補給站查詢</h2>
+    <!-- 橫向活動卡片 -->
+    <div class="event-card-horizontal">
+      
+      <!-- 左側海報圖片 -->
+      <div class="event-card-img-box">
+        <img src="assets/images/event/event_1.jpg" alt="月來月浪漫 Moon Rider" class="event-card-img">
+      </div>
+
+      <!-- 右側文字內容區塊 -->
+      <div class="event-card-content">
         
-        <!-- 搜尋輸入框 -->
-        <div class="search-container">
-            <input type="text" id="searchInput" class="search-input" placeholder="輸入關鍵字搜尋補給站（如：咖啡、台南、漢堡）...">
+        <!-- Facebook 標籤 -->
+        <div class="fb-tag">
+          <i class="fa-brands fa-facebook"></i>
+          <span>Facebook</span>
         </div>
 
-        <!-- Leaflet 地圖容器 -->
-        <div id="map"></div>
-            <div class="filter-container">
-                <!-- 縣市篩選下拉選單 -->
-                <select id="citySelect" class="filter-select">
-                    <option value="all">全部縣市</option>
-                </select>
+        <!-- 卡片標題 -->
+        <h3 class="event-card-title">07/24 月來月浪漫 Moon Rider</h3>
 
-        <!-- 類別篩選下拉選單 -->
-        <select id="categorySelect" class="filter-select">
-            <option value="all">全部類別</option>
-        </select>
-</div>
-        <!-- 補給站文字卡片容器 -->
-        <div class="station-grid" id="stationGrid"></div>
-    </section>
+        <!-- 卡片內文說明 -->
+        <p class="event-card-desc">
+          加入我們的騎行聚會，一起享受騎乘的微風還有浪漫的野餐時光。詳細資訊與活動公告皆以社群專頁為主。
+        </p>
 
-    <!-- 頁尾 -->
-    <footer>
-        <div class="footer-socials">
-            <a href="https://www.instagram.com/romantic.picnic.club" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-instagram"></i></a>
-            <a href="https://www.facebook.com/romantic.picnic.club" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-facebook"></i></a>
-            <a href="https://github.com/romanticpicnicclub/RomanticPicnicClub" target="_blank"><i class="fa-brands fa-github"></i></a>
-        </div>
-        <p>&copy; 2026 國民車浪漫野餐隊 Romantic Picnic Club. All Rights Reserved.</p>
-    </footer>
+        <!-- 連結按鈕 -->
+        <a href="https://www.facebook.com/share/p/14sR7atSw1S/" target="_blank" rel="noopener noreferrer" class="read-more-btn">
+          閱讀完整貼文 &rarr;
+        </a>
 
-    <!-- ==================== 腳本引入（嚴格控管載入順序） ==================== -->
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+  <!-- ==================== 3. 魔法小卡介紹區塊 ==================== -->
+ <section id="magic-card" class="magic-card-section">
+  <div class="magic-card-container">
     
-    <!-- 1. 先引入唯一的 Leaflet JS 套件 -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- 區塊標題與黃色橫線 -->
+    <h2 class="section-title">浪漫魔法小卡</h2>
+    <div class="title-underline"></div>
+
+    <!-- 深藍色卡片主體 -->
+    <div class="magic-card-box">
+      
+      <!-- 左側小卡展示圖 -->
+      <div class="magic-card-img-box">
+        <img src="assets/images/magiccard/MagicCard_Sample.png" alt="浪漫魔法小卡" class="magic-card-img">
+      </div>
+
+      <!-- 右側文字內容區塊 -->
+      <div class="magic-card-content">
+        <h3 class="magic-card-subtitle">隨身攜帶的浪漫通行證</h3>
+        
+        <p class="magic-card-desc">
+          「浪漫魔法小卡」是屬於每位浪漫野餐隊員的專屬徽章，曾經參與過我們的活動並完成指定條件即可獲得。只要在我們合作的「浪漫補給站」消費時出示此卡，就能夠享有車友限定的專屬優惠。
+        </p>
+
+        <!-- 橘粉色標籤按鈕 -->
+        <a href="#stations" class="recruitment-btn">
+          合作店家品牌持續招募中！
+        </a>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+
+
+  <!-- ==================== 4. 浪漫補給站 (Leaflet 地圖與查詢) ==================== -->
+  <section id="stations">
+    <h2 class="section-title">浪漫補給站查詢</h2>
     
-    <!-- 2. 再引入你外部開發的浪漫補給站地圖主程式碼 -->
-    <script src="assets/js/map.js"></script>
+    <!-- 補給站 LOGO 圖片 (置中) -->
+    <img src="assets/images/logo/RomanticSupply_LOGO.png" alt="RomanticSupply LOGO" class="main-logo-img">
+
+    <!-- 篩選器與搜尋列 -->
+    <div class="filter-container">
+      <select id="citySelect" class="filter-select">
+        <option value="all">所有縣市</option>
+      </select>
+
+      <select id="categorySelect" class="filter-select">
+        <option value="all">所有類別</option>
+      </select>
+    </div>
+
+    <div class="search-container">
+      <input type="text" id="searchInput" class="search-input" placeholder="輸入關鍵字搜尋補給站（如：咖啡、台南、漢堡）...">
+    </div>
+
+    <!-- Leaflet 地圖容器 -->
+    <div id="map"></div>
+
+    <!-- 店家卡片列表容器 -->
+    <div id="stationGrid" class="station-grid"></div>
+  </section>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <!-- Swiper JS -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+  <!-- 自訂 JS -->
+  <script src="assets/js/map.js"></script>
+
+  <!-- Footer 頁腳區塊 -->
+<footer style="background-color: #19283c; color: #ffffff; padding: 40px 20px; text-align: center; margin-top: 60px;">
+  <div style="max-width: 1200px; margin: 0 auto;">
+    <h3 style="font-size: 20px; font-weight: 700; margin-bottom: 12px; color: #c85a44;">國民車浪漫野餐隊</h3>
+    <p style="font-size: 14px; color: #94a3b8; margin-bottom: 20px;">浪漫的人，做浪漫的事。</p>
+    
+    <div style="display: flex; justify-content: center; gap: 20px; margin-bottom: 24px;">
+      <a href="https://www.facebook.com/romantic.picnic.club" style="color: #ffffff; font-size: 20px; transition: color 0.2s;" onmouseover="this.style.color='#d8624a'" onmouseout="this.style.color='#ffffff'"><i class="fa-brands fa-facebook"></i></a>
+      <a href="https://www.instagram.com/romantic.picnic.club" style="color: #ffffff; font-size: 20px; transition: color 0.2s;" onmouseover="this.style.color='#d8624a'" onmouseout="this.style.color='#ffffff'"><i class="fa-brands fa-instagram"></i></a>
+      <a href="mailto:romantic.picnic.club@gmail.com" style="color: #ffffff; font-size: 20px; transition: color 0.2s;" onmouseover="this.style.color='#d8624a'" onmouseout="this.style.color='#ffffff'"><i class="fa-solid fa-envelope"></i></a>
+    </div>
+
+    <div style="border-top: 1px solid #334155; padding-top: 20px; font-size: 13px; color: #64748b;">
+      © 2026 國民車浪漫野餐隊 All Rights Reserved.
+    </div>
+  </div>
+</footer>
+
 </body>
 </html>
