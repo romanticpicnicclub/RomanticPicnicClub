@@ -1,185 +1,242 @@
-// 1. 你的 GAS 網頁應用程式 URL
-const romanticApiUrl = "https://script.google.com/macros/s/AKfycbzEaSWoZET1mj-R9lGD1fCTGx2wPT5Jygnwg-FMXkiMhl6htfNuolwbEWCSANP5i1s_lA/exec";
+// Google Apps Script API 網址
+const romanticApiUrl = 'https://script.google.com/macros/s/AKfycbzEaSWoZET1mj-R9lGD1fCTGx2wPT5Jygnwg-FMXkiMhl6htfNuolwbEWCSANP5i1s_lA/exec';
 
-// 2. 初始化 Leaflet 地圖（預設定位在台灣中心點附近）
-const map = L.map('map').setView([23.973875, 120.982024], 7.5); 
+let map;
+let allPlaces = []; 
+let markersGroup = L.layerGroup(); 
 
-// 3. 載入底圖
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+// 1. 初始化地圖與取得 API 資料
+async function initMapAndData() {
+  map = L.map('map').setView([22.9997, 120.2270], 12);
+  
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; OpenStreetMap contributors'
-}).addTo(map);
+  }).addTo(map);
 
-// 用來存放地圖標記的圖層群組（這樣每次篩選才能清空重畫）
-let markersGroup = L.layerGroup().addTo(map);
+  markersGroup.addTo(map);
 
-// 全域變數，用來存放從雲端抓下來的所有補給站資料
-let allStations = [];
+  try {
+    const response = await fetch(romanticApiUrl);
+    allPlaces = await response.json();
 
-// 4. 抓取資料並初始化網頁
-async function initData() {
-    try {
-        console.log("正在從 GAS 浪漫補給站抓取最新資料...");
-        const response = await fetch(romanticApiUrl);
-        
-        if (!response.ok) {
-            throw new Error("網路連線回應錯誤: " + response.status);
-        }
+    populateFilterOptions(allPlaces);
+    renderData(allPlaces);
 
-        // 直接接收 GAS 處理好的 JSON 陣列
-        allStations = await response.json(); 
-        console.log("🎉 成功載入浪漫補給站資料，總數：", allStations.length, allStations);
-        
-        // 開始進行初次地圖與列表渲染
-        renderMapAndList(allStations);
+    // 監聽選單與搜尋事件
+    const citySelect = document.getElementById('citySelect');
+    const categorySelect = document.getElementById('categorySelect');
+    if (citySelect) citySelect.addEventListener('change', filterData);
+    if (categorySelect) categorySelect.addEventListener('change', filterData);
 
-    } catch (error) {
-        console.error("❌ 地圖資料載入失敗，請檢查雲端設定:", error);
-        // 如果載入失敗，這裡放一個英文欄位規格的本地備用防當機資料
-        allStations = [
-            { "name": "連線失敗備用點", "category": "系統提示", "city": "請檢查網路", "discount": "請重新整理網頁", "phone": "", "address": "目前無法取得雲端試算表資料", "lat": 23.97, "lng": 120.98, "logo": "" }
-        ];
-        renderMapAndList(allStations);
+    const searchInput = document.getElementById('searchInput'); 
+    if (searchInput) {
+      searchInput.addEventListener('input', filterData);
     }
+
+  } catch (error) {
+    console.error('資料讀取失敗:', error);
+  }
 }
 
-// 5. 核心渲染函式：將資料畫到地圖上並產出下方卡片
-function renderMapAndList(data) {
-    // A. 清空地圖上原有的所有 Marker
-    markersGroup.clearLayers();
+// 2. 動態生成下拉選單選項
+function populateFilterOptions(data) {
+  const citySelect = document.getElementById('citySelect');
+  const categorySelect = document.getElementById('categorySelect');
+
+  if (!citySelect || !categorySelect) return;
+
+  const cities = new Set();
+  const categories = new Set();
+
+  data.forEach(item => {
+    const cityVal = item.city || item.City;
+    const catVal = item.category || item.Category;
+
+    if (cityVal) cities.add(String(cityVal).trim());
+    if (catVal) categories.add(String(catVal).trim());
+  });
+
+  cities.forEach(city => {
+    const option = document.createElement('option');
+    option.value = city;
+    option.textContent = city;
+    citySelect.appendChild(option);
+  });
+
+  categories.forEach(category => {
+    const option = document.createElement('option');
+    option.value = category;
+    option.textContent = category;
+    categorySelect.appendChild(option);
+  });
+}
+
+// 3. 執行三合一篩選邏輯
+function filterData() {
+  const citySelect = document.getElementById('citySelect');
+  const categorySelect = document.getElementById('categorySelect');
+  const selectedCity = citySelect ? citySelect.value : 'all';
+  const selectedCategory = categorySelect ? categorySelect.value : 'all';
+
+  const searchInput = document.getElementById('searchInput'); 
+  const searchText = searchInput ? searchInput.value.toLowerCase().trim() : '';
+
+  const filteredPlaces = allPlaces.filter(place => {
+    const cityVal = place.city || place.City || '';
+    const catVal = place.category || place.Category || '';
+    const nameVal = place.name || place.Name || '';
+    const addressVal = place.address || place.Address || '';
+    const noteVal = place.note || place.Note || '';
+
+    const matchCity = (selectedCity === 'all') || (cityVal === selectedCity);
+    const matchCategory = (selectedCategory === 'all') || (catVal === selectedCategory);
     
-    // B. 清空網頁下方的文字卡片列表容器
-    const stationGrid = document.getElementById('stationGrid');
-    if (stationGrid) stationGrid.innerHTML = '';
+    const matchSearch = searchText === '' || 
+      cityVal.toLowerCase().includes(searchText) ||
+      catVal.toLowerCase().includes(searchText) ||
+      nameVal.toLowerCase().includes(searchText) ||
+      addressVal.toLowerCase().includes(searchText) ||
+      noteVal.toLowerCase().includes(searchText);
 
-    // 如果篩選後沒有半個補給站，顯示提示訊息
-    if (data.length === 0) {
-        if (stationGrid) stationGrid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 20px; color: var(--peach);">沒有找到相符的浪漫補給站</div>`;
-        return;
-    }
+    return matchCity && matchCategory && matchSearch;
+  });
 
-    // 預設的浪漫占位圖，當無圖片或破圖時使用
-    const defaultPlaceholder = "https://via.placeholder.com/150?text=Romantic";
-
-    // C. 開始依序跑每一筆補給站資料
-    data.forEach(station => {
-        // 【嚴格對齊英文欄位】完全移除中文 Key 避免錯位判定
-        const name = station.name || "未命名補給站";
-        const category = station.category || "未分類";
-        const city = station.city || "";
-        const discount = station.discount || "無特別優惠";
-        const phone = station.phone || "無";
-        const address = station.address || "";
-        
-        // --- 圖片處理與安全篩選邏輯 ---
-        let logoRaw = station.logo || "";
-        let logo = logoRaw.toString().trim();
-
-        // 核心防護：如果拿到的內容不是網址（例如試算表欄位錯格吃到中文字），直接清空觸發預設圖
-        if (!logo.toLowerCase().startsWith("http")) {
-            logo = ""; 
-        } else if (logo.includes("drive.google.com")) {
-            // 解析 Google Drive 格式並轉為直接外連網址 (若無使用 GAS 的 Base64 轉換時的雙重保險)
-            let fileId = "";
-            if (logo.includes("id=")) {
-                const urlParams = new URLSearchParams(logo.split('?')[1]);
-                fileId = urlParams.get('id');
-            } else if (logo.includes("/file/d/")) {
-                const matches = logo.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
-                if (matches) fileId = matches[1];
-            }
-            
-            if (fileId) {
-                logo = `https://drive.google.com/uc?export=view&id=${fileId}`;
-            }
-        }
-
-        // 最終保險：如果空值，套用預設圖
-        if (!logo) {
-            logo = defaultPlaceholder;
-        }
-        
-        // 強制將經緯度字串轉為浮點數，防呆避免地圖出錯
-        const lat = parseFloat(station.lat);
-        const lng = parseFloat(station.lng);
-
-        // 產生 Google Maps 導航連結
-        const mapUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(name + ' ' + address)}`;
-        
-        // 建立地圖地標彈出視窗（Popup）的 HTML（加入 onerror 破圖防禦）
-        const popupHtml = `
-            <div class="map-popup-content" style="font-family: sans-serif; min-width: 200px;">
-                <img src="${logo}" alt="LOGO" class="popup-logo" onerror="this.src='${defaultPlaceholder}';" style="width:50px; height:50px; object-fit:cover; border-radius:50%; float:right; margin-left:10px;">
-                <h4 style="margin: 5px 0; color:#E05263; font-size:16px; font-weight:bold;">${name}</h4>
-                <p style="margin: 3px 0; font-size:13px;"><strong>分類：</strong>${city} · ${category}</p>
-                <p style="margin: 3px 0; font-size:13px; color:#E05263;"><strong>優惠：</strong>${discount}</p>
-                <p style="margin: 3px 0; font-size:12px; color:#666;"><strong>地址：</strong>${address}</p>
-                <a href="${mapUrl}" target="_blank" style="margin-top:8px; display:inline-block; color:white; text-decoration:none; padding:5px 10px; border-radius:4px; font-size:12px; background-color:#1D2D44;">
-                    <i class="fa-solid fa-location-arrow"></i> 開始導航
-                </a>
-            </div>
-        `;
-
-        // D. 只要經緯度合法，就畫地標（Marker）上地圖
-        if (!isNaN(lat) && !isNaN(lng)) {
-            L.marker([lat, lng])
-             .bindPopup(popupHtml)
-             .addTo(markersGroup);
-        }
-
-        // E. 同步渲染網頁下方的精美文字卡片（修正 src 與 onerror）
-        if (stationGrid) {
-            const card = document.createElement('div');
-            card.className = 'station-card';
-            card.innerHTML = `
-                <div>
-                    <div style="display:flex; gap:10px; align-items:center; margin-bottom:10px;">
-                        <img src="${logo}" onerror="this.src='${defaultPlaceholder}';" style="width:40px; height:40px; object-fit:cover; border-radius:50%; border:1px solid #ddd;">
-                        <span class="station-tag" style="margin:0;">${city} · ${category}</span>
-                    </div>
-                    <h3 class="station-name">${name}</h3>
-                    <p style="font-size:13px; color:#666; margin-bottom:5px;"><i class="fa-solid fa-phone"></i> ${phone}</p>
-                    <p class="station-discount"><i class="fa-solid fa-gift"></i> ${discount}</p>
-                </div>
-                <a href="${mapUrl}" target="_blank" class="nav-btn"><i class="fa-solid fa-location-arrow"></i> 開啟 Google Maps 導航</a>
-            `;
-            stationGrid.appendChild(card);
-        }
-    });
-
-    // F. 當點選或輸入搜尋時，自動縮放到適合看見所有篩選地標的視野
-    if (data.length > 0) {
-        const group = new L.featureGroup(markersGroup.getLayers());
-        if (group.getBounds().isValid()) {
-            map.fitBounds(group.getBounds().pad(0.1));
-        }
-    }
+  renderData(filteredPlaces);
 }
 
-// 6. 搜尋關鍵字即時監聽（同步修正為英文標頭對齊屬性）
-const searchInput = document.getElementById('searchInput');
-if (searchInput) {
-    searchInput.addEventListener('input', (e) => {
-        const keyword = e.target.value.toLowerCase().trim();
-        
-        // 篩選包含關鍵字的補給站（支援名稱、分類、縣市、地址、優惠等模糊搜尋）
-        const filtered = allStations.filter(station => {
-            const name = (station.name || "").toLowerCase();
-            const category = (station.category || "").toLowerCase();
-            const city = (station.city || "").toLowerCase();
-            const address = (station.address || "").toLowerCase();
-            const discount = (station.discount || "").toLowerCase();
-            
-            return name.includes(keyword) || 
-                   category.includes(keyword) || 
-                   city.includes(keyword) || 
-                   address.includes(keyword) || 
-                   discount.includes(keyword);
-        });
-        
-        // 重新呼叫渲染，讓地圖與列表同步更新！
-        renderMapAndList(filtered);
-    });
+// 4. 生成漂亮的店家卡片 HTML (含圖片/Icon與 Google Maps 導航按鈕)
+function createCardHtml(place) {
+  const name = place.name || place.Name || '未命名店家';
+  const city = place.city || place.City || '';
+  const category = place.category || place.Category || '補給站';
+  const phone = place.phone || place.Phone || place.tel || place.Tel || '';
+  const discount = place.discount || place.Discount || '優惠待定';
+  const address = place.address || place.Address || '';
+  
+  // 店家圓形 Logo (如果 GAS 沒有 logo 欄位，預設帶一個圖示)
+  const logoUrl = place.logo || place.Logo || place.imageUrl || place.ImageUrl || '';
+
+  // Google Maps 導航網址 (優先使用地址，沒有地址用名稱)
+  const queryText = address ? `${name} ${address}` : name;
+  const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(queryText)}`;
+
+  // 標籤顯示：若有縣市就顯示「台南市 · 咖啡午茶」，沒有就只顯示「咖啡午茶」
+  const tagText = city ? `${city} · ${category}` : category;
+
+  return `
+    <div class="station-card" style="
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    ">
+      <div>
+        <!-- 頂部：圓形 Logo 與 分類標籤 -->
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+          ${logoUrl ? 
+            `<img src="${logoUrl}" alt="${name}" style="width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 1px solid #eee;">` : 
+            `<div style="width: 44px; height: 44px; border-radius: 50%; background: #f3f4f6; display: flex; align-items: center; justify-content: center; color: #9ca3af; border: 1px solid #eee;"><i class="fa-solid fa-store"></i></div>`
+          }
+          <span style="
+            background-color: #fde8e0;
+            color: #e07a5f;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 20px;
+            display: inline-block;
+          ">${tagText}</span>
+        </div>
+
+        <!-- 店名 -->
+        <h3 style="
+          font-size: 20px;
+          font-weight: 700;
+          color: #1e293b;
+          margin: 0 0 12px 0;
+          line-height: 1.3;
+        ">${name}</h3>
+
+        <!-- 電話 (如果有資料才顯示) -->
+        ${phone ? `
+          <p style="margin: 0 0 8px 0; font-size: 14px; color: #64748b; display: flex; align-items: center; gap: 8px;">
+            <i class="fa-solid fa-phone" style="color: #64748b;"></i>
+            <span>${phone}</span>
+          </p>
+        ` : ''}
+
+        <!-- 優惠內容 -->
+        <p style="margin: 0 0 20px 0; font-size: 14px; color: #e07a5f; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+          <i class="fa-solid fa-gift" style="color: #e07a5f;"></i>
+          <span>${discount}</span>
+        </p>
+      </div>
+
+      <!-- 導航按鈕 -->
+      <a href="${mapUrl}" target="_blank" rel="noopener noreferrer" style="
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        background-color: #1e293b;
+        color: #ffffff;
+        text-decoration: none;
+        padding: 12px;
+        border-radius: 8px;
+        font-size: 15px;
+        font-weight: 600;
+        transition: background-color 0.2s;
+      " onmouseover="this.style.backgroundColor='#0f172a'" onmouseout="this.style.backgroundColor='#1e293b'">
+        <i class="fa-solid fa-paper-plane" style="font-size: 13px;"></i>
+        <span>開啟 Google Maps 導航</span>
+      </a>
+    </div>
+  `;
 }
 
-// 執行初始化，啟動浪漫補給站功能！
-initData();
+// 5. 渲染地圖 Marker 與 店家卡片
+function renderData(places) {
+  markersGroup.clearLayers();
+  
+  const cardContainer = document.getElementById('stationGrid'); 
+  if (cardContainer) cardContainer.innerHTML = '';
+
+  const bounds = [];
+
+  places.forEach(place => {
+    const lat = place.lat || place.Lat;
+    const lng = place.lng || place.Lng;
+    const name = place.name || place.Name || '';
+    const category = place.category || place.Category || '';
+
+    // A. 地圖 Marker
+    if (lat && lng) {
+      const marker = L.marker([lat, lng])
+        .bindPopup(`<b>${name}</b><br>${category}`);
+      
+      markersGroup.addLayer(marker);
+      bounds.push([lat, lng]);
+    }
+
+    // B. 卡片渲染
+    if (cardContainer) {
+      const cardHtml = createCardHtml(place);
+      cardContainer.insertAdjacentHTML('beforeend', cardHtml);
+    }
+  });
+
+  if (bounds.length > 0) {
+    map.fitBounds(bounds, { padding: [50, 50] });
+  }
+}
+
+// 確保 DOM 載入後啟動
+document.addEventListener('DOMContentLoaded', () => {
+  initMapAndData();
+});
