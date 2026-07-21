@@ -19,9 +19,9 @@ body {
     z-index: 1000;
     background-color: #ffffff;
     padding: 18px 40px;
-    /* 截圖底部的橘紅色細線 */
     border-bottom: 3px solid #c85a44; 
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+    width: 100%;
 }
 
 .nav-container {
@@ -32,18 +32,19 @@ body {
     align-items: center;
 }
 
-/* 左上角 Logo 橘紅色字體 */
 .nav-logo {
     font-size: 1.35rem;
     font-weight: 800;
-    color: #c85a44; /* 精準橘紅色 */
+    color: #c85a44;
     text-decoration: none;
     letter-spacing: 0.5px;
+    white-space: nowrap;
 }
 
 .nav-menu {
     display: flex;
     gap: 28px;
+    align-items: center;
 }
 
 .nav-link {
@@ -52,6 +53,8 @@ body {
     font-size: 15px;
     font-weight: 700;
     transition: color 0.2s;
+    white-space: nowrap !important;
+    display: inline-block !important;
 }
 
 .nav-link:hover {
@@ -62,10 +65,10 @@ body {
 .about-hero-container {
     position: relative;
     width: 100%;
-    height: 70vh; /* 固定輪播高度 */
+    height: 70vh;
     min-height: 480px;
     overflow: hidden;
-    background-color: #000; /* 防止載入前閃爍 */
+    background-color: #000;
 }
 
 .about-swiper {
@@ -76,13 +79,11 @@ body {
 .about-hero-img {
     width: 100%;
     height: 100%;
-    /* 核心修改：改為 cover，讓圖片鋪滿容器並自動裁切，徹底消除左右黑塊 */
     object-fit: cover; 
-    object-position: center; /* 讓圖片重點保持在中央 */
+    object-position: center;
     display: block;
 }
 
-/* 圖片上方暗色遮罩 (讓白色文字更清晰) */
 .about-hero-overlay {
     position: absolute;
     top: 0;
@@ -90,14 +91,14 @@ body {
     width: 100%;
     height: 100%;
     z-index: 10;
-    background: rgba(0, 0, 0, 0.35); /* 輕微暗化 */
+    background: rgba(0, 0, 0, 0.35);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     color: #ffffff;
     text-align: center;
-    pointer-events: none; /* 避免遮擋 Swiper 滑動操作 */
+    pointer-events: none;
 }
 
 .about-hero-title {
@@ -125,16 +126,15 @@ body {
 /* ==================== 2.活動資訊區塊樣式 ==================== */
 .events-section {
     padding: 60px 20px;
-    background-color: #fcfcfc; /* 淺灰色背景襯托白色卡片 */
+    background-color: #fcfcfc;
 }
 
 .events-container {
-    max-width: 900px; /* 限制寬度讓整體畫面看起來跟截圖一樣精緻 */
+    max-width: 900px;
     margin: 0 auto;
     text-align: center;
 }
 
-/* 標題與底下的黃色裝飾線 */
 .events-container .section-title {
     font-size: 2rem;
     font-weight: 700;
@@ -145,12 +145,11 @@ body {
 .title-underline {
     width: 32px;
     height: 4px;
-    background-color: #e5c158; /* 截圖中的黃色小橫線 */
+    background-color: #e5c158;
     border-radius: 2px;
     margin: 0 auto 36px;
 }
 
-/* 橫向活動卡片主體 */
 .event-card-horizontal {
     background: #ffffff;
     border-radius: 16px;
@@ -162,9 +161,8 @@ body {
     text-align: left;
 }
 
-/* 左側圖片容器 */
 .event-card-img-box {
-    width: 45%;            /* 圖片佔據左側約 45% 的寬度 */
+    width: 45%;
     min-height: 280px;
     flex-shrink: 0;
 }
@@ -172,11 +170,10 @@ body {
 .event-card-img {
     width: 100%;
     height: 100%;
-    object-fit: cover;     /* 自動縮放填滿容器 */
+    object-fit: cover;
     display: block;
 }
 
-/* 右側內容容器 */
 .event-card-content {
     width: 55%;
     padding: 36px 32px;
@@ -186,7 +183,6 @@ body {
     align-items: flex-start;
 }
 
-/* FB 標籤 */
 .fb-tag {
     display: inline-flex;
     align-items: center;
@@ -200,7 +196,6 @@ body {
     margin-bottom: 16px;
 }
 
-/* 標題與說明文字 */
 .event-card-title {
     font-size: 1.25rem;
     font-weight: 800;
@@ -216,7 +211,6 @@ body {
     margin: 0 0 24px 0;
 }
 
-/* 按鈕 */
 .read-more-btn {
     color: #1877f2;
     font-size: 14px;
@@ -230,21 +224,6 @@ body {
     text-decoration: underline;
 }
 
-/* RWD 手機版自動切換為直向排列 */
-@media (max-width: 768px) {
-    .event-card-horizontal {
-        flex-direction: column;
-    }
-    .event-card-img-box {
-        width: 100%;
-        height: 220px;
-    }
-    .event-card-content {
-        width: 100%;
-        padding: 24px 20px;
-    }
-}
-
 /* ==================== 3. 魔法小卡區塊樣式 ==================== */
 .magic-card-section {
     padding: 60px 20px;
@@ -252,14 +231,13 @@ body {
 }
 
 .magic-card-container {
-    max-width: 960px; /* 稍微調寬，讓左右比例更符合截圖 */
+    max-width: 960px;
     margin: 0 auto;
     text-align: center;
 }
 
-/* 深藍色大卡片外框 */
 .magic-card-box {
-    background-color: #19283c; /* 精準還原截圖的深靛藍色 */
+    background-color: #19283c;
     border-radius: 16px;
     padding: 48px 40px;
     display: flex;
@@ -270,7 +248,6 @@ body {
     text-align: left;
 }
 
-/* 左側圖片容器 */
 .magic-card-img-box {
     width: 48%;
     flex-shrink: 0;
@@ -279,12 +256,11 @@ body {
 .magic-card-img {
     width: 100%;
     height: auto;
-    border-radius: 8px; /* 稍微減小圓角 */
+    border-radius: 8px;
     display: block;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25); /* 增加陰影立體感 */
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
 }
 
-/* 右側內容容器 */
 .magic-card-content {
     width: 52%;
     display: flex;
@@ -292,9 +268,8 @@ body {
     align-items: flex-start;
 }
 
-/* 黃色小標題 */
 .magic-card-subtitle {
-    color: #e0b448; /* 精準黃色 */
+    color: #e0b448;
     font-size: 1.5rem;
     font-weight: 800;
     margin: 0 0 18px 0;
@@ -302,7 +277,6 @@ body {
     letter-spacing: 0.5px;
 }
 
-/* 內文說明 */
 .magic-card-desc {
     color: #ffffff;
     font-size: 14.5px;
@@ -312,15 +286,14 @@ body {
     font-weight: 400;
 }
 
-/* 橘粉色招募按鈕 */
 .recruitment-btn {
     display: inline-block;
-    background-color: #d8624a; /* 精準珊瑚橘粉色 */
+    background-color: #d8624a;
     color: #ffffff;
     font-size: 13.5px;
     font-weight: 700;
     padding: 8px 18px;
-    border-radius: 50px; /* 完美圓角膠囊 */
+    border-radius: 50px;
     text-decoration: none;
     letter-spacing: 0.3px;
     transition: all 0.2s ease;
@@ -331,22 +304,6 @@ body {
     background-color: #c4523b;
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(216, 98, 74, 0.4);
-}
-
-/* RWD 手機版自動切換為直向排列 */
-@media (max-width: 768px) {
-    .magic-card-box {
-        flex-direction: column;
-        padding: 28px 20px;
-        gap: 28px;
-    }
-    .magic-card-img-box,
-    .magic-card-content {
-        width: 100%;
-    }
-    .magic-card-subtitle {
-        font-size: 1.25rem;
-    }
 }
 
 /* ==================== 4. 浪漫補給站區塊 ==================== */
@@ -364,7 +321,6 @@ body {
     font-weight: 700;
 }
 
-/* LOGO 圖片置中設定 */
 #stations .main-logo-img {
     display: block;
     margin: 0 auto 24px;
@@ -373,7 +329,6 @@ body {
     height: auto;
 }
 
-/* 篩選下拉選單與搜尋框 */
 .filter-container {
     display: flex;
     justify-content: center;
@@ -414,7 +369,6 @@ body {
     box-shadow: 0 0 0 3px rgba(224, 122, 95, 0.2);
 }
 
-/* 地圖樣式 */
 #map {
     height: 450px;
     width: 100%;
@@ -423,77 +377,157 @@ body {
     margin-bottom: 32px;
 }
 
-/* 店家卡片網格 */
 .station-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 24px;
 }
 
-/* RWD 響應式調整 */
-@media (max-width: 768px) {
-    .about-hero-container {
-        height: 55vh;
-    }
-    .about-hero-title {
-        font-size: 1.8rem;
-    }
-    .about-hero-text {
-        font-size: 0.95rem;
-    }
-    .filter-select {
-        width: 100%;
-    }
+/* ==================== 5. Footer 頁腳區塊（精準還原截圖樣式） ==================== */
+.footer {
+    background-color: #19283c;
+    color: #ffffff;
+    padding: 48px 20px 36px;
+    text-align: center;
+    margin-top: 60px;
+    width: 100%;
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-title {
+    font-size: 1.25rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+    color: #c85a44; /* 精準橘紅色標題 */
+    letter-spacing: 0.5px;
+}
+
+.footer-desc {
+    font-size: 14px;
+    color: #94a3b8;
+    margin-bottom: 24px;
+    letter-spacing: 0.5px;
+}
+
+.footer-socials {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 28px;
+}
+
+.footer-socials a {
+    color: #ffffff;
+    font-size: 20px;
+    transition: color 0.2s ease, transform 0.2s ease;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.footer-socials a:hover {
+    color: #d8624a; /* Hover 時顯現深珊瑚橘色 */
+    transform: translateY(-2px);
+}
+
+.footer-copyright {
+    border-top: 1px solid #2a3b50; /* 底層灰色細分隔線 */
+    padding-top: 24px;
+    font-size: 13px;
+    color: #64748b;
+    letter-spacing: 0.3px;
 }
 
 /* ===== 手機端 RWD 適應優化 ===== */
 @media (max-width: 768px) {
-  /* 1. 導覽列改為上下排列（Logo 在上，選單在下） */
   .navbar {
     padding: 12px 16px !important;
+  }
+
+  .nav-container {
     flex-direction: column !important;
     align-items: flex-start !important;
     gap: 12px !important;
+    width: 100% !important;
   }
 
-  /* 2. 選單容器：支援橫向滑動、防止字體斷行 */
-  .nav-links {
+  .nav-menu {
     width: 100% !important;
     display: flex !important;
-    flex-direction: row !important; /* 強制橫向 */
+    flex-direction: row !important;
     justify-content: flex-start !important;
     gap: 16px !important;
-    overflow-x: auto !important;   /* 超出範圍可左右滑動 */
-    white-space: nowrap !important; /* 核心：禁止文字換行變豎排 */
-    padding-bottom: 4px !important; /* 避免滾動條擋住文字 */
-    -webkit-overflow-scrolling: touch; /* iOS 平滑滾動 */
+    overflow-x: auto !important;
+    white-space: nowrap !important;
+    padding-bottom: 4px !important;
+    -webkit-overflow-scrolling: touch;
   }
 
-  /* 3. 選單連結文字與換行控制 */
-  .nav-links a {
-    white-space: nowrap !important; /* 確保單一連結不換行 */
-    font-size: 14px !important;     /* 適當縮小字級 */
-    flex-shrink: 0 !important;      /* 防止連結被擠壓 */
+  .nav-link {
+    white-space: nowrap !important;
+    word-break: keep-all !important;
+    font-size: 14px !important;
+    flex-shrink: 0 !important;
+    display: inline-block !important;
   }
 
-  /* 隱藏橫向滾動條（維持畫面美觀） */
-  .nav-links::-webkit-scrollbar {
-    display: none;
+  .nav-menu::-webkit-scrollbar {
+    display: none !important;
   }
 
-  /* 4. 補給站篩選區直向排列 */
+  .about-hero-container {
+    height: 55vh;
+  }
+  .about-hero-title {
+    font-size: 1.8rem;
+  }
+  .about-hero-text {
+    font-size: 0.95rem;
+  }
+
+  .event-card-horizontal {
+    flex-direction: column;
+  }
+  .event-card-img-box {
+    width: 100%;
+    height: 220px;
+  }
+  .event-card-content {
+    width: 100%;
+    padding: 24px 20px;
+  }
+
+  .magic-card-box {
+    flex-direction: column;
+    padding: 28px 20px;
+    gap: 28px;
+  }
+  .magic-card-img-box,
+  .magic-card-content {
+    width: 100%;
+  }
+  .magic-card-subtitle {
+    font-size: 1.25rem;
+  }
+
   .filter-container {
     flex-direction: column !important;
     align-items: stretch !important;
   }
 
-  .filter-container select,
-  .filter-container input {
+  .filter-select {
     width: 100% !important;
   }
 
-  /* 5. 地圖高度適應 */
   #map {
     height: 350px !important;
+  }
+
+  .footer {
+    padding: 36px 16px 28px;
   }
 }
