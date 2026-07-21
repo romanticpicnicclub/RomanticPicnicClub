@@ -4,8 +4,24 @@ const romanticApiUrl = 'https://script.google.com/macros/s/AKfycbzEaSWoZET1mj-R9
 let map;
 let allPlaces = []; 
 let markersGroup = L.layerGroup(); 
+let markerMap = {}; // 用來存放 index 對應的 Marker 物件
 
-// 1. 初始化地圖與取得 API 資料
+// 0. 定義自訂玫瑰花 Emoji 地圖標記 Icon
+const roseEmojiIcon = L.divIcon({
+  className: 'rose-marker',
+  html: `<div style="
+    font-size: 32px;
+    line-height: 1;
+    filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.3));
+    cursor: pointer;
+    text-align: center;
+  ">🌹</div>`,
+  iconSize: [36, 36],
+  iconAnchor: [18, 18],
+  popupAnchor: [0, -18]
+});
+
+// 1. 初始化地圖與資料
 async function initMapAndData() {
   map = L.map('map').setView([22.9997, 120.2270], 12);
   
@@ -22,23 +38,21 @@ async function initMapAndData() {
     populateFilterOptions(allPlaces);
     renderData(allPlaces);
 
-    // 監聽選單與搜尋事件
+    // 綁定選單與搜尋事件
     const citySelect = document.getElementById('citySelect');
     const categorySelect = document.getElementById('categorySelect');
+    const searchInput = document.getElementById('searchInput');
+
     if (citySelect) citySelect.addEventListener('change', filterData);
     if (categorySelect) categorySelect.addEventListener('change', filterData);
-
-    const searchInput = document.getElementById('searchInput'); 
-    if (searchInput) {
-      searchInput.addEventListener('input', filterData);
-    }
+    if (searchInput) searchInput.addEventListener('input', filterData);
 
   } catch (error) {
     console.error('資料讀取失敗:', error);
   }
 }
 
-// 2. 動態生成下拉選單選項
+// 2. 動態生成選單選項
 function populateFilterOptions(data) {
   const citySelect = document.getElementById('citySelect');
   const categorySelect = document.getElementById('categorySelect');
@@ -71,14 +85,14 @@ function populateFilterOptions(data) {
   });
 }
 
-// 3. 執行三合一篩選邏輯
+// 3. 執行三合一篩選 (縣市 + 類別 + 關鍵字)
 function filterData() {
   const citySelect = document.getElementById('citySelect');
   const categorySelect = document.getElementById('categorySelect');
+  const searchInput = document.getElementById('searchInput'); 
+
   const selectedCity = citySelect ? citySelect.value : 'all';
   const selectedCategory = categorySelect ? categorySelect.value : 'all';
-
-  const searchInput = document.getElementById('searchInput'); 
   const searchText = searchInput ? searchInput.value.toLowerCase().trim() : '';
 
   const filteredPlaces = allPlaces.filter(place => {
@@ -104,27 +118,24 @@ function filterData() {
   renderData(filteredPlaces);
 }
 
-// 4. 生成漂亮的店家卡片 HTML (含圖片/Icon與 Google Maps 導航按鈕)
-function createCardHtml(place) {
+// 4. 生成店家卡片 HTML (含雙向跳轉功能)
+function createCardHtml(place, index) {
   const name = place.name || place.Name || '未命名店家';
   const city = place.city || place.City || '';
   const category = place.category || place.Category || '補給站';
   const phone = place.phone || place.Phone || place.tel || place.Tel || '';
   const discount = place.discount || place.Discount || '優惠待定';
   const address = place.address || place.Address || '';
-  
-  // 店家圓形 Logo (如果 GAS 沒有 logo 欄位，預設帶一個圖示)
   const logoUrl = place.logo || place.Logo || place.imageUrl || place.ImageUrl || '';
+  const lat = place.lat || place.Lat;
+  const lng = place.lng || place.Lng;
 
-  // Google Maps 導航網址 (優先使用地址，沒有地址用名稱)
   const queryText = address ? `${name} ${address}` : name;
   const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(queryText)}`;
-
-  // 標籤顯示：若有縣市就顯示「台南市 · 咖啡午茶」，沒有就只顯示「咖啡午茶」
   const tagText = city ? `${city} · ${category}` : category;
 
   return `
-    <div class="station-card" style="
+    <div id="station-card-${index}" class="station-card" style="
       background: #ffffff;
       border: 1px solid #e5e7eb;
       border-radius: 16px;
@@ -134,10 +145,9 @@ function createCardHtml(place) {
       flex-direction: column;
       justify-content: space-between;
       box-sizing: border-box;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      transition: all 0.3s ease;
     ">
       <div>
-        <!-- 頂部：圓形 Logo 與 分類標籤 -->
         <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
           ${logoUrl ? 
             `<img src="${logoUrl}" alt="${name}" style="width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 1px solid #eee;">` : 
@@ -154,79 +164,160 @@ function createCardHtml(place) {
           ">${tagText}</span>
         </div>
 
-        <!-- 店名 -->
-        <h3 style="
-          font-size: 20px;
-          font-weight: 700;
-          color: #1e293b;
-          margin: 0 0 12px 0;
-          line-height: 1.3;
-        ">${name}</h3>
+        <h3 style="font-size: 20px; font-weight: 700; color: #1e293b; margin: 0 0 12px 0; line-height: 1.3;">${name}</h3>
 
-        <!-- 電話 (如果有資料才顯示) -->
+        ${address ? `
+          <p style="margin: 0 0 8px 0; font-size: 14px; color: #64748b; display: flex; align-items: flex-start; gap: 8px; line-height: 1.4;">
+            <i class="fa-solid fa-location-dot" style="color: #c85a44; font-size: 14px; margin-top: 3px; flex-shrink: 0;"></i>
+            <span>${address}</span>
+          </p>
+        ` : ''}
+
         ${phone ? `
           <p style="margin: 0 0 8px 0; font-size: 14px; color: #64748b; display: flex; align-items: center; gap: 8px;">
-            <i class="fa-solid fa-phone" style="color: #64748b;"></i>
+            <i class="fa-solid fa-phone" style="font-size: 13px; flex-shrink: 0;"></i>
             <span>${phone}</span>
           </p>
         ` : ''}
 
-        <!-- 優惠內容 -->
         <p style="margin: 0 0 20px 0; font-size: 14px; color: #e07a5f; font-weight: 600; display: flex; align-items: center; gap: 8px;">
-          <i class="fa-solid fa-gift" style="color: #e07a5f;"></i>
+          <i class="fa-solid fa-gift" style="flex-shrink: 0;"></i>
           <span>${discount}</span>
         </p>
       </div>
 
-      <!-- 導航按鈕 -->
-      <a href="${mapUrl}" target="_blank" rel="noopener noreferrer" style="
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        background-color: #1e293b;
-        color: #ffffff;
-        text-decoration: none;
-        padding: 12px;
-        border-radius: 8px;
-        font-size: 15px;
-        font-weight: 600;
-        transition: background-color 0.2s;
-      " onmouseover="this.style.backgroundColor='#0f172a'" onmouseout="this.style.backgroundColor='#1e293b'">
-        <i class="fa-solid fa-paper-plane" style="font-size: 13px;"></i>
-        <span>開啟 Google Maps 導航</span>
-      </a>
+      <div style="display: flex; gap: 8px;">
+        <!-- 🆕 按鈕一：在地圖上定位 + 開啟 Popup -->
+        ${(lat && lng) ? `
+          <button onclick="focusOnMap(${index}, ${lat}, ${lng})" style="
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            background-color: #f1f5f9;
+            color: #334155;
+            border: 1px solid #cbd5e1;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 13.5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+          " onmouseover="this.style.backgroundColor='#e2e8f0'" onmouseout="this.style.backgroundColor='#f1f5f9'">
+            <i class="fa-solid fa-location-crosshairs" style="color: #e07a5f;"></i>
+            <span>地圖看位置</span>
+          </button>
+        ` : ''}
+
+        <!-- 按鈕二：導航連結 -->
+        <a href="${mapUrl}" target="_blank" rel="noopener noreferrer" style="
+          flex: 1.2;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 6px;
+          background-color: #1e293b;
+          color: #ffffff;
+          text-decoration: none;
+          padding: 10px;
+          border-radius: 8px;
+          font-size: 13.5px;
+          font-weight: 600;
+          transition: background-color 0.2s;
+        " onmouseover="this.style.backgroundColor='#0f172a'" onmouseout="this.style.backgroundColor='#1e293b'">
+          <i class="fa-solid fa-paper-plane" style="font-size: 12px;"></i>
+          <span>開啟導航</span>
+        </a>
+      </div>
     </div>
   `;
 }
 
-// 5. 渲染地圖 Marker 與 店家卡片
+// 5. 點擊卡片「地圖看位置」觸發的函式
+function focusOnMap(index, lat, lng) {
+  const mapElement = document.getElementById('map');
+  if (mapElement) {
+    // 捲動畫面至地圖區域
+    mapElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+    // 移動地圖並打開標記 Popup
+    map.flyTo([lat, lng], 15, { duration: 1.2 });
+    
+    if (markerMap[index]) {
+      setTimeout(() => {
+        markerMap[index].openPopup();
+      }, 1200);
+    }
+  }
+}
+
+// 6. 渲染地圖 Marker 與 卡片 (包含搜尋無結果提示)
 function renderData(places) {
   markersGroup.clearLayers();
+  markerMap = {}; 
   
   const cardContainer = document.getElementById('stationGrid'); 
   if (cardContainer) cardContainer.innerHTML = '';
 
+  // 🆕 當無符合條件的資料時顯示提示
+  if (!places || places.length === 0) {
+    if (cardContainer) {
+      cardContainer.innerHTML = `
+        <div style="
+          grid-column: 1 / -1;
+          text-align: center;
+          padding: 60px 20px;
+          background: #ffffff;
+          border-radius: 16px;
+          border: 1px dashed #cbd5e1;
+          margin: 20px 0;
+        ">
+          <div style="font-size: 48px; margin-bottom: 12px;">🌹</div>
+          <h4 style="font-size: 18px; color: #1e293b; font-weight: 700; margin: 0 0 8px 0;">找不到相關的浪漫補給站</h4>
+          <p style="font-size: 14px; color: #64748b; margin: 0;">嘗試調整關鍵字或選擇其他縣市類別看看吧！</p>
+        </div>
+      `;
+    }
+    return;
+  }
+
   const bounds = [];
 
-  places.forEach(place => {
+  places.forEach((place, index) => {
     const lat = place.lat || place.Lat;
     const lng = place.lng || place.Lng;
     const name = place.name || place.Name || '';
     const category = place.category || place.Category || '';
 
-    // A. 地圖 Marker
     if (lat && lng) {
-      const marker = L.marker([lat, lng])
-        .bindPopup(`<b>${name}</b><br>${category}`);
+      const marker = L.marker([lat, lng], { icon: roseEmojiIcon })
+        .bindPopup(`<b>${name}</b><br><span style="color: #64748b; font-size: 12px;">${category}</span>`);
       
+      marker.on('click', () => {
+        const targetCard = document.getElementById(`station-card-${index}`);
+        if (targetCard) {
+          targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+          targetCard.style.borderColor = '#e07a5f';
+          targetCard.style.boxShadow = '0 0 0 4px rgba(224, 122, 95, 0.25), 0 8px 24px rgba(0,0,0,0.1)';
+          targetCard.style.transform = 'translateY(-4px)';
+
+          setTimeout(() => {
+            targetCard.style.borderColor = '#e5e7eb';
+            targetCard.style.boxShadow = '0 4px 12px rgba(0,0,0,0.03)';
+            targetCard.style.transform = 'none';
+          }, 1500);
+        }
+      });
+
       markersGroup.addLayer(marker);
+      markerMap[index] = marker;
       bounds.push([lat, lng]);
     }
 
-    // B. 卡片渲染
     if (cardContainer) {
-      const cardHtml = createCardHtml(place);
+      const cardHtml = createCardHtml(place, index);
       cardContainer.insertAdjacentHTML('beforeend', cardHtml);
     }
   });
@@ -236,7 +327,23 @@ function renderData(places) {
   }
 }
 
-// 確保 DOM 載入後啟動
+// 7. 初始化 Swiper 與地圖
 document.addEventListener('DOMContentLoaded', () => {
   initMapAndData();
+
+  const aboutSwiper = new Swiper('.about-swiper', {
+    loop: true,
+    autoplay: {
+      delay: 4000,
+      disableOnInteraction: false,
+    },
+    effect: 'fade',
+    fadeEffect: {
+      crossFade: true
+    },
+    pagination: {
+      el: '.swiper-pagination',
+      clickable: true,
+    },
+  });
 });
