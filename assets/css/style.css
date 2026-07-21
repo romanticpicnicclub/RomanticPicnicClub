@@ -448,19 +448,40 @@ body {
 
 /* ===== 手機端 RWD 適應優化 ===== */
 @media (max-width: 768px) {
-  /* 導覽列適應 */
+  /* 1. 導覽列改為上下排列（Logo 在上，選單在下） */
   .navbar {
     padding: 12px 16px !important;
     flex-direction: column !important;
+    align-items: flex-start !important;
     gap: 12px !important;
   }
 
+  /* 2. 選單容器：支援橫向滑動、防止字體斷行 */
   .nav-links {
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: row !important; /* 強制橫向 */
+    justify-content: flex-start !important;
     gap: 16px !important;
-    font-size: 14px !important;
+    overflow-x: auto !important;   /* 超出範圍可左右滑動 */
+    white-space: nowrap !important; /* 核心：禁止文字換行變豎排 */
+    padding-bottom: 4px !important; /* 避免滾動條擋住文字 */
+    -webkit-overflow-scrolling: touch; /* iOS 平滑滾動 */
   }
 
-  /* 補給站搜尋篩選區直向排列 */
+  /* 3. 選單連結文字與換行控制 */
+  .nav-links a {
+    white-space: nowrap !important; /* 確保單一連結不換行 */
+    font-size: 14px !important;     /* 適當縮小字級 */
+    flex-shrink: 0 !important;      /* 防止連結被擠壓 */
+  }
+
+  /* 隱藏橫向滾動條（維持畫面美觀） */
+  .nav-links::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* 4. 補給站篩選區直向排列 */
   .filter-container {
     flex-direction: column !important;
     align-items: stretch !important;
@@ -471,7 +492,7 @@ body {
     width: 100% !important;
   }
 
-  /* 地圖高度適應 */
+  /* 5. 地圖高度適應 */
   #map {
     height: 350px !important;
   }
