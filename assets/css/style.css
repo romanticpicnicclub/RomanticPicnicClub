@@ -33,14 +33,25 @@ body {
 }
 
 /* 左上角 Logo 橘紅色字體 */
+/* 左上角 Logo 橘紅色字體 */
 .nav-logo {
-    font-size: 1.25rem;
-    font-weight: 800;
-    color: #c85a44;
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    gap: 8px;
     text-decoration: none;
-    letter-spacing: 0.5px;
-    line-height: 1.3;
-    display: inline-block;
+    color: #c85a44;
+    font-weight: 800;
+}
+
+.logo-zh {
+    font-size: 1.25rem;
+    white-space: nowrap;
+}
+
+.logo-en {
+    font-size: 1.1rem;
+    white-space: nowrap;
 }
 
 .nav-menu {
@@ -446,7 +457,7 @@ body {
 
 /* ===== 手機端 RWD 適應優化 ===== */
 @media (max-width: 768px) {
-  .navbar {
+.navbar {
     padding: 12px 16px !important;
   }
 
@@ -457,16 +468,26 @@ body {
     width: 100% !important;
   }
 
-  /* 🔥 關鍵修正：調整手機端 Logo 字體大小與縮放，防止被切掉 */
+  /* 🔥 核心修正：手機端將中英文自動分成兩行顯示，並防止超出螢幕 */
   .nav-logo {
-    font-size: 1rem !important;        /* 縮小字體以完整放入螢幕 */
-    max-width: 100% !important;
-    line-height: 1.4 !important;
-    white-space: normal !important;     /* 當螢幕極窄時允許自然折行 */
-    word-break: break-word !important;
+    flex-direction: column !important; /* 中文在上、英文在下 */
+    align-items: flex-start !important;
+    gap: 2px !important;
+    width: 100% !important;
   }
 
-  /* 手機選單橫向滾動 */
+  .logo-zh {
+    font-size: 1.1rem !important;
+    line-height: 1.2 !important;
+  }
+
+  .logo-en {
+    font-size: 0.85rem !important; /* 縮小英文比例，確保完全容納 */
+    line-height: 1.2 !important;
+    opacity: 0.9;
+  }
+
+  /* 選單橫向滑動 */
   .nav-menu {
     width: 100% !important;
     display: flex !important;
@@ -490,6 +511,7 @@ body {
   .nav-menu::-webkit-scrollbar {
     display: none !important;
   }
+}
 
   /* 輪播與卡片適應 */
   .about-hero-container {
