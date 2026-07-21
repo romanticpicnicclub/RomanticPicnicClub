@@ -61,9 +61,9 @@
                         <div class="event-tag">
                             <i class="fab fa-facebook"></i> Facebook
                         </div>
-                        <h3 class="event-title">Romantic Picnic Club 浪漫野餐俱樂部</h3>
+                        <h3 class="event-title">Romantic Picnic Club 國民車浪漫野餐隊</h3>
                         <p class="event-description">
-                          點擊前往 Facebook 查看完整貼文！加入我們的野餐聚會，一起在草地上享受微風、音樂與浪漫的午後時光。詳細報名資訊與活動公告皆以社群專頁為主。
+                          點擊前往 Facebook 查看完整貼文！加入我們的騎行聚會，一起享受騎乘的微風還有浪漫的野餐時光。詳細資訊與活動公告皆以社群專頁為主。
                         </p>
                         <span class="event-more-btn">閱讀完整貼文 →</span>
                     </div>
@@ -100,7 +100,17 @@
 
         <!-- Leaflet 地圖容器 -->
         <div id="map"></div>
+            <div class="filter-container">
+                <!-- 縣市篩選下拉選單 -->
+                <select id="citySelect" class="filter-select">
+                    <option value="all">全部縣市</option>
+                </select>
 
+        <!-- 類別篩選下拉選單 -->
+        <select id="categorySelect" class="filter-select">
+            <option value="all">全部類別</option>
+        </select>
+</div>
         <!-- 補給站文字卡片容器 -->
         <div class="station-grid" id="stationGrid"></div>
     </section>
