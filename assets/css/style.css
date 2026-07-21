@@ -264,6 +264,31 @@ section {
     z-index: 1; /* 防止覆蓋導覽列 */
 }
 
+
+.filter-container {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+  justify-content: flex-start; /* 靠左對齊 */
+}
+
+/* Leaflet 下拉式篩選單樣式 */
+.filter-select {
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  font-size: 14px;
+  color: #333;
+  outline: none;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.filter-select:hover {
+  border-color: #f0a500; /* 可以換成你們隊伍的品牌主題色 */
+}
+
 /* Leaflet 地圖彈窗內部樣式 */
 .map-popup-content {
     font-family: sans-serif;
