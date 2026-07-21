@@ -18,7 +18,7 @@ body {
     top: 0;
     z-index: 1000;
     background-color: #ffffff;
-    padding: 18px 40px;
+    padding: 16px 24px;
     border-bottom: 3px solid #c85a44; 
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
     width: 100%;
@@ -32,18 +32,20 @@ body {
     align-items: center;
 }
 
+/* 左上角 Logo 橘紅色字體 */
 .nav-logo {
-    font-size: 1.35rem;
+    font-size: 1.25rem;
     font-weight: 800;
     color: #c85a44;
     text-decoration: none;
     letter-spacing: 0.5px;
-    white-space: nowrap;
+    line-height: 1.3;
+    display: inline-block;
 }
 
 .nav-menu {
     display: flex;
-    gap: 28px;
+    gap: 24px;
     align-items: center;
 }
 
@@ -383,7 +385,7 @@ body {
     gap: 24px;
 }
 
-/* ==================== 5. Footer 頁腳區塊（精準還原截圖樣式） ==================== */
+/* ==================== 5. Footer 頁腳區塊 ==================== */
 .footer {
     background-color: #19283c;
     color: #ffffff;
@@ -402,7 +404,7 @@ body {
     font-size: 1.25rem;
     font-weight: 800;
     margin-bottom: 10px;
-    color: #c85a44; /* 精準橘紅色標題 */
+    color: #c85a44;
     letter-spacing: 0.5px;
 }
 
@@ -430,12 +432,12 @@ body {
 }
 
 .footer-socials a:hover {
-    color: #d8624a; /* Hover 時顯現深珊瑚橘色 */
+    color: #d8624a;
     transform: translateY(-2px);
 }
 
 .footer-copyright {
-    border-top: 1px solid #2a3b50; /* 底層灰色細分隔線 */
+    border-top: 1px solid #2a3b50;
     padding-top: 24px;
     font-size: 13px;
     color: #64748b;
@@ -451,10 +453,20 @@ body {
   .nav-container {
     flex-direction: column !important;
     align-items: flex-start !important;
-    gap: 12px !important;
+    gap: 10px !important;
     width: 100% !important;
   }
 
+  /* 🔥 關鍵修正：調整手機端 Logo 字體大小與縮放，防止被切掉 */
+  .nav-logo {
+    font-size: 1rem !important;        /* 縮小字體以完整放入螢幕 */
+    max-width: 100% !important;
+    line-height: 1.4 !important;
+    white-space: normal !important;     /* 當螢幕極窄時允許自然折行 */
+    word-break: break-word !important;
+  }
+
+  /* 手機選單橫向滾動 */
   .nav-menu {
     width: 100% !important;
     display: flex !important;
@@ -479,6 +491,7 @@ body {
     display: none !important;
   }
 
+  /* 輪播與卡片適應 */
   .about-hero-container {
     height: 55vh;
   }
