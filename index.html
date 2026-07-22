@@ -158,27 +158,50 @@
     <!-- 補給站 LOGO 圖片 (置中) -->
     <img src="assets/images/logo/RomanticSupply_LOGO.png" alt="RomanticSupply LOGO" class="main-logo-img">
 
-    <!-- 篩選器與搜尋列 -->
-    <div class="filter-container">
-      <select id="citySelect" class="filter-select">
-        <option value="all">所有縣市</option>
-      </select>
+  <!-- 搜尋與篩選容器 -->
+  <div class="filter-container">
+    <!-- 6. 縣市下拉選單 -->
+    <select id="city-filter" class="filter-select">
+      <option value="">全部縣市</option>
+      <option value="台北">台北市</option>
+      <option value="新北">新北市</option>
+      <option value="苗栗">苗栗縣</option>
+      <option value="台中">台中市</option>
+      <option value="台南">台南市</option>
+      <option value="高雄">高雄市</option>
+    </select>
 
-      <select id="categorySelect" class="filter-select">
-        <option value="all">所有類別</option>
-      </select>
-    </div>
+    <!-- 6. 類別下拉選單 -->
+    <select id="category-filter" class="filter-select">
+      <option value="">全部類型</option>
+      <option value="咖啡">風格咖啡廳</option>
+      <option value="機車">機車維修工坊</option>
+      <option value="戶外">戶外用品店</option>
+      <option value="民宿">風格民宿</option>
+      <option value="餐飲">餐飲美食</option>
+    </select>
 
-    <div class="search-container">
-      <input type="text" id="searchInput" class="search-input" placeholder="輸入關鍵字搜尋補給站（如：咖啡、台南、漢堡）...">
-    </div>
+    <!-- 2. 定位與排序按鈕 -->
+    <button id="geo-btn" class="action-btn">
+      <i class="fa-solid fa-location-crosshairs"></i> 離我最近
+    </button>
+  </div>
 
-    <!-- Leaflet 地圖容器 -->
-    <div id="map"></div>
+  <div class="search-container">
+    <input type="text" id="search-input" class="search-input" placeholder="搜尋店家名稱、關鍵字...">
+  </div>
 
-    <!-- 店家卡片列表容器 -->
-    <div id="stationGrid" class="station-grid"></div>
-  </section>
+  <!-- 地圖容器 -->
+  <div id="map"></div>
+
+  <!-- 店家卡片列表容器 -->
+  <div id="station-grid" class="station-grid"></div>
+
+  <!-- 3. 手機端切換視圖懸浮按鈕 (FAB) -->
+  <button id="view-toggle-btn" class="view-toggle-fab">
+    <i class="fa-solid fa-list"></i> 切換清單
+  </button>
+</section>
 
   <!-- Footer 頁腳區塊 -->
 <footer class="footer">
