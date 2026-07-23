@@ -151,59 +151,48 @@
     </div>
   </section>
 
-  <!-- ==================== 4. 浪漫補給站 (地圖與沉浸式懸浮查詢) ==================== -->
-  <section id="stations" class="map-section">
-    
+ <!-- ==================== 4. 浪漫補給站區塊 ==================== -->
+<section id="stations" class="map-section">
+    <!-- 標題區塊 -->
     <div class="section-header-floating">
-      <h2 class="section-title">浪漫補給站查詢</h2>
-      <!-- 補給站 LOGO 圖片 -->
-      <img src="assets/images/logo/RomanticSupply_LOGO.png" alt="RomanticSupply LOGO" class="main-logo-img">
+        <h2 class="section-title">浪漫補給站</h2>
+        <img src="assets/images/logo.png" alt="國民車浪漫野餐隊" class="main-logo-img">
     </div>
 
-    <!-- 滿版地圖與懸浮介面容器 -->
+    <!-- 滿版地圖與懸浮元件主要容器 -->
     <div class="map-container">
-      
-      <!-- 地圖容器 -->
-      <div id="map"></div>
+        <!-- 1. OpenStreetMap 地圖 -->
+        <div id="map"></div>
 
-      <!-- 懸浮搜尋與篩選控制列 (根據設計圖懸浮於地圖上方) -->
-      <div class="search-floating-panel">
-        
-        <!-- 1. 「離我最近」定位按鈕 -->
-        <button id="geoBtn" class="geo-btn">
-          <i class="fa-solid fa-location-crosshairs"></i> 離我最近
-        </button>
-
-        <!-- 2. 搜尋列與下拉選單容器 -->
-        <div class="search-controls">
-          <div class="input-group">
-            <input type="text" id="searchInput" class="search-input" placeholder="搜尋店家名稱、關鍵字..." autocomplete="off">
-          </div>
-          
-          <div class="filter-group">
-            <select id="citySelect" class="filter-select">
-              <option value="all">全部縣市</option>
-            </select>
-
-            <select id="categorySelect" class="filter-select">
-              <option value="all">全部類型</option>
-            </select>
-          </div>
+        <!-- 2. 上方懸浮搜尋與篩選面板 -->
+        <div class="search-floating-panel">
+            <button id="geo-btn" class="geo-btn">
+                <i class="fa-solid fa-location-crosshairs"></i> 離我最近
+            </button>
+            <div class="search-controls">
+                <div class="input-group">
+                    <input type="text" id="search-input" class="search-input" placeholder="搜尋店家名稱、關鍵字...">
+                </div>
+                <div class="filter-group">
+                    <select id="city-filter" class="filter-select">
+                        <option value="all">全部縣市</option>
+                    </select>
+                    <select id="category-filter" class="filter-select">
+                        <option value="all">全部類型</option>
+                    </select>
+                </div>
+            </div>
         </div>
 
-      </div>
-
-      <!-- 3. 下方/側邊 搜尋結果店家卡片面板 (Bottom Sheet 抽屜) -->
-      <div id="resultsPanel" class="results-panel">
-        <!-- 手機端頂部拖曳視覺條 (點擊可收合/展開) -->
-        <div class="drag-handle"></div>
-        
-        <!-- 店家卡片渲染區域 -->
-        <div id="station-grid" class="station-grid"></div>
-      </div>
-
+        <!-- 3. 下方 Bottom Sheet 抽屜 (顯示店家卡片列表) -->
+        <div id="resultsPanel" class="results-panel">
+            <!-- 拖曳手把 (手機端手動拉開/收合) -->
+            <div id="dragHandle" class="drag-handle"></div>
+            <!-- 卡片容器 -->
+            <div id="station-grid" class="station-grid"></div>
+        </div>
     </div>
-  </section>
+</section>
 
   <!-- Footer 頁腳區塊 -->
   <footer class="footer">
