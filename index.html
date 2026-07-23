@@ -151,60 +151,62 @@
     </div>
   </section>
 
-  <!-- ==================== 4. 浪漫補給站 (Leaflet 地圖與查詢) ==================== -->
-  <section id="stations">
-    <h2 class="section-title">浪漫補給站查詢</h2>
+  <!-- ==================== 4. 浪漫補給站 (地圖與沉浸式懸浮查詢) ==================== -->
+  <section id="stations" class="map-section">
     
-    <!-- 補給站 LOGO 圖片 (置中) -->
-    <img src="assets/images/logo/RomanticSupply_LOGO.png" alt="RomanticSupply LOGO" class="main-logo-img">
+    <div class="section-header-floating">
+      <h2 class="section-title">浪漫補給站查詢</h2>
+      <!-- 補給站 LOGO 圖片 -->
+      <img src="assets/images/logo/RomanticSupply_LOGO.png" alt="RomanticSupply LOGO" class="main-logo-img">
+    </div>
 
-  <!-- 搜尋與篩選容器 -->
-  <div class="filter-container">
-    <!-- 6. 縣市下拉選單 -->
-    <select id="city-filter" class="filter-select">
-      <option value="">全部縣市</option>
-      <option value="台北">台北市</option>
-      <option value="新北">新北市</option>
-      <option value="苗栗">苗栗縣</option>
-      <option value="台中">台中市</option>
-      <option value="台南">台南市</option>
-      <option value="高雄">高雄市</option>
-    </select>
+    <!-- 滿版地圖與懸浮介面容器 -->
+    <div class="map-container">
+      
+      <!-- 地圖容器 -->
+      <div id="map"></div>
 
-    <!-- 6. 類別下拉選單 -->
-    <select id="category-filter" class="filter-select">
-      <option value="">全部類型</option>
-      <option value="咖啡">風格咖啡廳</option>
-      <option value="機車">機車維修工坊</option>
-      <option value="戶外">戶外用品店</option>
-      <option value="民宿">風格民宿</option>
-      <option value="餐飲">餐飲美食</option>
-    </select>
+      <!-- 懸浮搜尋與篩選控制列 (根據設計圖懸浮於地圖上方) -->
+      <div class="search-floating-panel">
+        
+        <!-- 1. 「離我最近」定位按鈕 -->
+        <button id="geoBtn" class="geo-btn">
+          <i class="fa-solid fa-location-crosshairs"></i> 離我最近
+        </button>
 
-    <!-- 2. 定位與排序按鈕 -->
-    <button id="geo-btn" class="action-btn">
-      <i class="fa-solid fa-location-crosshairs"></i> 離我最近
-    </button>
-  </div>
+        <!-- 2. 搜尋列與下拉選單容器 -->
+        <div class="search-controls">
+          <div class="input-group">
+            <input type="text" id="searchInput" class="search-input" placeholder="搜尋店家名稱、關鍵字..." autocomplete="off">
+          </div>
+          
+          <div class="filter-group">
+            <select id="citySelect" class="filter-select">
+              <option value="all">全部縣市</option>
+            </select>
 
-  <div class="search-container">
-    <input type="text" id="search-input" class="search-input" placeholder="搜尋店家名稱、關鍵字...">
-  </div>
+            <select id="categorySelect" class="filter-select">
+              <option value="all">全部類型</option>
+            </select>
+          </div>
+        </div>
 
-  <!-- 地圖容器 -->
-  <div id="map"></div>
+      </div>
 
-  <!-- 店家卡片列表容器 -->
-  <div id="station-grid" class="station-grid"></div>
+      <!-- 3. 下方/側邊 搜尋結果店家卡片面板 (Bottom Sheet 抽屜) -->
+      <div id="resultsPanel" class="results-panel">
+        <!-- 手機端頂部拖曳視覺條 (點擊可收合/展開) -->
+        <div class="drag-handle"></div>
+        
+        <!-- 店家卡片渲染區域 -->
+        <div id="station-grid" class="station-grid"></div>
+      </div>
 
-  <!-- 3. 手機端切換視圖懸浮按鈕 (FAB) -->
-  <button id="view-toggle-btn" class="view-toggle-fab">
-    <i class="fa-solid fa-list"></i> 切換清單
-  </button>
-</section>
+    </div>
+  </section>
 
   <!-- Footer 頁腳區塊 -->
-<footer class="footer">
+  <footer class="footer">
     <div class="footer-container">
       <h3 class="footer-title">國民車浪漫野餐隊</h3>
       <p class="footer-desc">浪漫的人，做浪漫的事。</p>
