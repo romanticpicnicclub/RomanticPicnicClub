@@ -1,4 +1,4 @@
-/* 基本全局設定 */
+/* ==================== 全局與基本設定 ==================== */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -16,7 +16,7 @@ body {
 .navbar {
     position: sticky;
     top: 0;
-    z-index: 1000;
+    z-index: 2000;
     background-color: #ffffff;
     padding: 16px 24px;
     border-bottom: 3px solid #c85a44; 
@@ -135,7 +135,7 @@ body {
     opacity: 1;
 }
 
-/* ==================== 2.活動資訊區塊樣式 ==================== */
+/* ==================== 2. 活動資訊區塊樣式 ==================== */
 .events-section {
     padding: 60px 20px;
     background-color: #fcfcfc;
@@ -318,61 +318,120 @@ body {
     box-shadow: 0 4px 12px rgba(216, 98, 74, 0.4);
 }
 
-/* ==================== 4. 浪漫補給站區塊 ==================== */
-#stations {
-    max-width: 1200px;
-    margin: 40px auto;
+/* ==================== 4. 浪漫補給站 (沉浸式地圖 & 懸浮搜尋介面) ==================== */
+.map-section {
+    position: relative;
+    width: 100%;
+    margin-top: 40px;
+    padding-bottom: 20px;
+}
+
+.section-header-floating {
+    text-align: center;
+    margin-bottom: 20px;
     padding: 0 20px;
 }
 
 .section-title {
-    text-align: center;
     font-size: 2rem;
     color: #1e293b;
-    margin-bottom: 20px;
+    margin-bottom: 8px;
     font-weight: 700;
 }
 
-#stations .main-logo-img {
+.main-logo-img {
     display: block;
-    margin: 0 auto 24px;
-    max-width: 220px;
+    margin: 0 auto;
+    max-width: 200px;
     width: 100%;
     height: auto;
 }
 
-.filter-container {
+/* 地圖外層固定尺寸容器 */
+.map-container {
+    position: relative;
+    width: 100%;
+    height: calc(100vh - 160px);
+    min-height: 580px;
+    max-height: 820px;
+    overflow: hidden;
+    background-color: #e2e8f0;
+}
+
+/* 地圖填滿整個容器 */
+#map {
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+/* --- 懸浮搜尋與篩選控制面板 --- */
+.search-floating-panel {
+    position: absolute;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 92%;
+    max-width: 440px;
+    z-index: 1000;
     display: flex;
-    justify-content: center;
-    gap: 16px;
-    margin-bottom: 16px;
-    flex-wrap: wrap;
+    flex-direction: column;
+    gap: 10px;
 }
 
-.filter-select {
-    padding: 10px 16px;
+/* 離我最近按鈕 */
+.geo-btn {
+    width: 100%;
+    background-color: #c85a44;
+    color: #ffffff;
+    border: none;
+    border-radius: 12px;
+    padding: 12px 20px;
     font-size: 15px;
-    border: 1px solid #cbd5e1;
-    border-radius: 8px;
-    outline: none;
-    background-color: #ffffff;
-    min-width: 160px;
+    font-weight: 700;
     cursor: pointer;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
 }
 
-.search-container {
-    max-width: 600px;
-    margin: 0 auto 24px;
+.geo-btn:hover {
+    background-color: #b34a35;
+}
+
+.geo-btn:active {
+    transform: scale(0.98);
+}
+
+/* 搜尋框與選單白底模糊包覆區 */
+.search-controls {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 12px;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+.input-group {
+    width: 100%;
 }
 
 .search-input {
     width: 100%;
-    padding: 12px 20px;
-    font-size: 15px;
+    padding: 10px 16px;
+    font-size: 14px;
     border: 1px solid #cbd5e1;
-    border-radius: 30px;
+    border-radius: 20px;
     outline: none;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+    background-color: #ffffff;
     transition: all 0.2s;
 }
 
@@ -381,67 +440,78 @@ body {
     box-shadow: 0 0 0 3px rgba(224, 122, 95, 0.2);
 }
 
-#map {
-    height: 450px;
-    width: 100%;
-    border-radius: 16px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    margin-bottom: 32px;
-}
-
-.station-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 24px;
-}
-
-/* --- 新增：GPS 定位按鈕與距離標籤 --- */
-.action-btn {
-    padding: 10px 18px;
-    font-size: 15px;
-    font-weight: 700;
-    color: #ffffff;
-    background-color: #c85a44;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    display: inline-flex;
-    align-items: center;
+.filter-group {
+    display: flex;
     gap: 8px;
 }
 
-.action-btn:hover {
-    background-color: #b34a35;
+.filter-select {
+    flex: 1;
+    padding: 8px 12px;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #1877f2; /* 藍色文字 */
+    border: 1px solid #cbd5e1;
+    border-radius: 20px;
+    outline: none;
+    background-color: #ffffff;
+    cursor: pointer;
+    text-align: center;
+}
+
+/* --- 搜尋結果店家卡片面板 (Bottom Sheet 抽屜) --- */
+.results-panel {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: #ffffff;
+    border-top-left-radius: 24px;
+    border-top-right-radius: 24px;
+    box-shadow: 0 -6px 24px rgba(0, 0, 0, 0.18);
+    max-height: 55%;
+    display: flex;
+    flex-direction: column;
+    transform: translateY(calc(100% - 32px)); /* 預設收合，留拖曳條引導 */
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* 有搜尋結果或切換時自動向上彈出 */
+.results-panel.active {
+    transform: translateY(0);
+}
+
+/* 拖曳手把 (Drag Handle) */
+.drag-handle {
+    width: 44px;
+    height: 5px;
+    background-color: #cbd5e1;
+    border-radius: 10px;
+    margin: 12px auto;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+/* 卡片滾動列表容器 */
+.station-grid {
+    padding: 0 16px 24px 16px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
 }
 
 .distance-badge {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
     background-color: #e8f5e9;
     color: #2e7d32;
     font-size: 12px;
     font-weight: 700;
-    padding: 2px 8px;
+    padding: 3px 8px;
     border-radius: 12px;
-    margin-left: 8px;
-}
-
-/* --- 新增：手機端 FAB 視圖切換按鈕（預設電腦端隱藏） --- */
-.view-toggle-fab {
-    display: none;
-    position: fixed;
-    bottom: 24px;
-    right: 24px;
-    z-index: 1001;
-    background-color: #19283c;
-    color: #ffffff;
-    border: none;
-    padding: 12px 20px;
-    border-radius: 30px;
-    font-size: 14px;
-    font-weight: 700;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
-    cursor: pointer;
 }
 
 /* ==================== 5. Footer 頁腳區塊 ==================== */
@@ -450,7 +520,7 @@ body {
     color: #ffffff;
     padding: 48px 20px 36px;
     text-align: center;
-    margin-top: 60px;
+    margin-top: 40px;
     width: 100%;
 }
 
@@ -503,7 +573,42 @@ body {
     letter-spacing: 0.3px;
 }
 
-/* ===== 手機端 RWD 適應優化 ===== */
+/* ==================== 電腦端 (Desktop Mode > 768px) RWD 配套 ==================== */
+@media (min-width: 769px) {
+    .search-floating-panel {
+        top: 24px;
+        left: 24px;
+        transform: none;
+        width: 380px;
+    }
+
+    /* 電腦版：改為左側懸浮側邊欄 (Floating Sidebar) */
+    .results-panel {
+        top: 200px;
+        left: 24px;
+        right: auto;
+        bottom: 24px;
+        width: 380px;
+        max-height: none;
+        border-radius: 16px;
+        transform: translateX(-120%); /* 隱藏於左側外 */
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .results-panel.active {
+        transform: translateX(0);
+    }
+
+    .drag-handle {
+        display: none; /* 電腦版不需要拖曳條 */
+    }
+
+    .station-grid {
+        padding-top: 16px;
+    }
+}
+
+/* ==================== 手機端 (Mobile Mode <= 768px) RWD 優化 ==================== */
 @media (max-width: 768px) {
     .navbar {
         padding: 12px 16px !important;
@@ -516,7 +621,6 @@ body {
         width: 100% !important;
     }
 
-    /* 手機端將中英文自動分成兩行顯示 */
     .nav-logo {
         flex-direction: column !important;
         align-items: flex-start !important;
@@ -535,7 +639,6 @@ body {
         opacity: 0.9;
     }
 
-    /* 選單橫向滑動 */
     .nav-menu {
         width: 100% !important;
         display: flex !important;
@@ -560,7 +663,6 @@ body {
         display: none !important;
     }
 
-    /* 輪播與卡片適應 */
     .about-hero-container {
         height: 55vh;
     }
@@ -596,35 +698,11 @@ body {
         font-size: 1.25rem;
     }
 
-    .filter-container {
-        flex-direction: column !important;
-        align-items: stretch !important;
-    }
-
-    .filter-select {
-        width: 100% !important;
-    }
-
-    #map {
-        height: 350px !important;
+    .map-container {
+        height: calc(100vh - 120px);
     }
 
     .footer {
         padding: 36px 16px 28px;
-    }
-
-    /* 新增：手機端 FAB 切換按鈕與地圖/列表切換控制 */
-    .view-toggle-fab {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-
-    body.map-view-active .station-grid {
-        display: none !important;
-    }
-
-    body.list-view-active #map {
-        display: none !important;
     }
 }
