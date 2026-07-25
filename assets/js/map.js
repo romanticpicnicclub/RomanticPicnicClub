@@ -124,7 +124,7 @@ function populateFilterOptions(data) {
   });
 }
 
-// 3. 執行三合一篩選 (縣市 + 類別 + 關鍵字 + GPS 距離排序)
+// 3. 執行三合一篩選 (縣市 + 類別 + 關鍵字 + 隨機排序 / GPS 距離排序)
 function filterData() {
   const citySelect = document.getElementById('city-filter') || document.getElementById('citySelect');
   const categorySelect = document.getElementById('category-filter') || document.getElementById('categorySelect');
@@ -154,8 +154,9 @@ function filterData() {
     return matchCity && matchCategory && matchSearch;
   });
 
-  // 如果已發動 GPS 定位，依照距離進行升冪排序（由近到遠）
+  // 判斷排序邏輯：
   if (userLatLng) {
+    // 1. 如果已發動 GPS 定位：依照距離由近到遠排序
     filteredPlaces.forEach(place => {
       const lat = place.lat || place.Lat;
       const lng = place.lng || place.Lng;
@@ -167,6 +168,12 @@ function filterData() {
     });
 
     filteredPlaces.sort((a, b) => a.calcDistance - b.calcDistance);
+  } else {
+    // 2. 未發動 GPS 定位：將篩選出來的店家「隨機洗牌」
+    for (let i = filteredPlaces.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [filteredPlaces[i], filteredPlaces[j]] = [filteredPlaces[j], filteredPlaces[i]];
+    }
   }
 
   // 篩選時自動展開清單面板
