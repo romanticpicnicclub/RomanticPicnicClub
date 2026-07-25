@@ -318,6 +318,15 @@ body {
     box-shadow: 0 4px 12px rgba(216, 98, 74, 0.4);
 }
 
+.romantic-supply-apply {
+    color: #ffffff;
+    font-size: 14.5px;
+    line-height: 4.85;
+    margin: 0 0 28px 0;
+    opacity: 0.95;
+    font-weight: 400;
+}
+
 /* ==================== 4. 浪漫補給站 (沉浸式地圖 & 懸浮搜尋介面) ==================== */
 .map-section {
     position: relative;
